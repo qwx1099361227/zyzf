@@ -7,6 +7,6 @@ dis = unittest.defaultTestLoader.discover("./", "login.py")
 
 timestr = time.strftime("%Y%m%d %H%M%S")
 
-with open("./测试购物登入" + timestr + ".html", "wb") as f:
+with open("./接口测试报告" + timestr + ".html", "wb") as f:
     run = HTMLTestRunner(f)
     run.run(dis)
