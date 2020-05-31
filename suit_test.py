@@ -5,7 +5,7 @@ from HTMLTestRunner import HTMLTestRunner
 
 dis = unittest.defaultTestLoader.discover("./", "login.py")
 
-timestr = time.strftime("%Y年%m月%d日%H时%M分%S秒")
+timestr = time.strftime("%Y/%m/%d/%H/%M/%S")
 
 with open("./接口测试报告" + timestr + ".html", "wb") as f:
     run = HTMLTestRunner(f)
