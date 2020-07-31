@@ -1,0 +1,545 @@
+{
+	"info": {
+		"_postman_id": "c045102e-21f4-447a-a835-f30e5435d1e8",
+		"name": "test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "shop Copy",
+			"item": [
+				{
+					"name": "登入",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e6d75ec2-adf7-4ead-9e25-ebb786009517",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "ede8c91a-6ffd-4e79-ac9d-ed26e32e7bbd",
+								"exec": [
+									"pm.test(\"Body 含有1099361227@qq.com\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"1099361227@qq.com\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"json里面的值是登入成功\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    ",
+									"    console.log(jsonData)",
+									"    pm.expect(jsonData.msg).to.eql('登陆成功');",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "1099361227@qq.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456as",
+									"type": "text"
+								},
+								{
+									"key": "verify_code",
+									"value": "1",
+									"type": "text"
+								}
+							],
+							"options": {
+								"urlencoded": {}
+							}
+						},
+						"url": {
+							"raw": "http://www.testingedu.com.cn:8000/index.php?m=Home&c=User&a=do_login&t=0.09340043571456302",
+							"protocol": "http",
+							"host": [
+								"www",
+								"testingedu",
+								"com",
+								"cn"
+							],
+							"port": "8000",
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "m",
+									"value": "Home"
+								},
+								{
+									"key": "c",
+									"value": "User"
+								},
+								{
+									"key": "a",
+									"value": "do_login"
+								},
+								{
+									"key": "t",
+									"value": "0.09340043571456302"
+								},
+								{
+									"key": "a",
+									"value": "{{city}}",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "登入",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "1099361227@qq.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123456as",
+											"type": "text"
+										},
+										{
+											"key": "verify_code",
+											"value": "{{test}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://www.testingedu.com.cn:8000/index.php?m=Home&c=User&a=do_login",
+									"protocol": "http",
+									"host": [
+										"www",
+										"testingedu",
+										"com",
+										"cn"
+									],
+									"port": "8000",
+									"path": [
+										"index.php"
+									],
+									"query": [
+										{
+											"key": "m",
+											"value": "Home"
+										},
+										{
+											"key": "c",
+											"value": "User"
+										},
+										{
+											"key": "a",
+											"value": "do_login"
+										},
+										{
+											"key": "t",
+											"value": "0.09340043571456302",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.14.1"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 27 Apr 2020 06:41:35 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=UTF-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/7.0.33"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "is_mobile=0; expires=Mon, 27-Apr-2020 07:41:35 GMT; Max-Age=3600; path=/"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "user_id=79; path=/"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "is_distribut=1; path=/"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "uname=1099361227%2540qq.com; path=/"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "cn=0; expires=Mon, 27-Apr-2020 05:41:35 GMT; Max-Age=0; path=/"
+								},
+								{
+									"key": "Expires",
+									"value": "Thu, 19 Nov 1981 08:52:00 GMT"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-store, no-cache, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								}
+							],
+							"cookie": [],
+							"body": "{\"status\":1,\"msg\":\"\\u767b\\u9646\\u6210\\u529f\",\"result\":{\"user_id\":79,\"email\":\"1099361227@qq.com\",\"password\":\"3a025c1b17bb618b27ad1b10d3a7a4fc\",\"paypwd\":null,\"sex\":0,\"birthday\":0,\"user_money\":\"0.00\",\"frozen_money\":\"0.00\",\"distribut_money\":\"0.00\",\"underling_number\":0,\"pay_points\":100,\"address_id\":0,\"reg_time\":1587969478,\"last_login\":1587969478,\"last_ip\":\"\",\"qq\":\"\",\"mobile\":\"\",\"mobile_validated\":0,\"oauth\":\"\",\"openid\":null,\"unionid\":null,\"head_pic\":\"\\/public\\/images\\/icon_goods_thumb_empty_300.png\",\"province\":0,\"city\":0,\"district\":0,\"email_validated\":1,\"nickname\":\"1099361227@qq.com\",\"level\":1,\"discount\":\"1.00\",\"total_amount\":\"0.00\",\"is_lock\":0,\"is_distribut\":1,\"first_leader\":0,\"second_leader\":0,\"third_leader\":0,\"token\":\"18895945e8d09f47cc7af4a48444adff\",\"message_mask\":63,\"push_id\":\"0\",\"distribut_level\":0,\"is_vip\":0,\"level_name\":null},\"url\":\"\"}"
+						}
+					]
+				},
+				{
+					"name": "添加商品",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8c414cbc-3ff5-4156-a85b-79032ed2714d",
+								"exec": [
+									"pm.test(\"添加购物车成功\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.msg).to.eql(\"加入购物车成功\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"// pm.environment.set(\"cart_ids\", \"5868\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "goods_id",
+									"value": " 1",
+									"type": "text"
+								},
+								{
+									"key": "goods_prom_type",
+									"value": " 0",
+									"type": "text"
+								},
+								{
+									"key": "shop_price",
+									"value": " 76.00",
+									"type": "text"
+								},
+								{
+									"key": "store_count",
+									"value": " 82",
+									"type": "text"
+								},
+								{
+									"key": "market_price",
+									"value": " 0.00",
+									"type": "text"
+								},
+								{
+									"key": "start_time",
+									"value": " ",
+									"type": "text"
+								},
+								{
+									"key": "end_time",
+									"value": " ",
+									"type": "text"
+								},
+								{
+									"key": "activity_title",
+									"value": " ",
+									"type": "text"
+								},
+								{
+									"key": "prom_detail",
+									"value": " ",
+									"type": "text"
+								},
+								{
+									"key": "activity_is_on",
+									"value": " ",
+									"type": "text"
+								},
+								{
+									"key": "item_id",
+									"value": " 274",
+									"type": "text"
+								},
+								{
+									"key": "exchange_integral",
+									"value": " 0",
+									"type": "text"
+								},
+								{
+									"key": "point_rate",
+									"value": " 10",
+									"type": "text"
+								},
+								{
+									"key": "is_virtual",
+									"value": " 0",
+									"type": "text"
+								},
+								{
+									"key": "virtual_limit",
+									"value": " 0",
+									"type": "text"
+								},
+								{
+									"key": "goods_spec[选择版本]",
+									"value": " 9",
+									"type": "text"
+								},
+								{
+									"key": "goods_spec[选择颜色]",
+									"value": " 11",
+									"type": "text"
+								},
+								{
+									"key": "goods_spec[套餐类型]",
+									"value": " 16",
+									"type": "text"
+								},
+								{
+									"key": "goods_num",
+									"value": " 11",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://www.testingedu.com.cn:8000/index.php?m=Home&c=Cart&a=ajaxAddCart",
+							"protocol": "http",
+							"host": [
+								"www",
+								"testingedu",
+								"com",
+								"cn"
+							],
+							"port": "8000",
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "m",
+									"value": "Home"
+								},
+								{
+									"key": "c",
+									"value": "Cart"
+								},
+								{
+									"key": "a",
+									"value": "ajaxAddCart"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "查看添加的商品",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "10d18670-fdb1-452e-a9b0-801989d1b121",
+								"exec": [
+									"pm.test(\"购物车含有vivoX21\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"vivoX21 6GB+128GB 4G全网通\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://www.testingedu.com.cn:8000/index.php?m=Home&c=Cart&a=header_cart_list",
+							"protocol": "http",
+							"host": [
+								"www",
+								"testingedu",
+								"com",
+								"cn"
+							],
+							"port": "8000",
+							"path": [
+								"index.php"
+							],
+							"query": [
+								{
+									"key": "m",
+									"value": "Home"
+								},
+								{
+									"key": "c",
+									"value": "Cart"
+								},
+								{
+									"key": "a",
+									"value": "header_cart_list"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "删除购物车",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "301f5ce0-277c-475b-b5ec-d3aa45f6f43f",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "9d56b022-88f6-441e-83f3-6ac2a3a9e025",
+								"exec": [
+									"pm.test(\"删除成功\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.msg).to.eql('删除成功');\r",
+									"});\r",
+									"\r",
+									"var cart=1\r",
+									"\r",
+									"cart_ids=pm.environment.get(\"cart_ids\");\r",
+									"\r",
+									"var j = parseInt(cart_ids)\r",
+									"\r",
+									"if (cart==1){j += 1}\r",
+									"\r",
+									"\r",
+									"console.log(\"新参数\",j)\r",
+									"\r",
+									"\r",
+									"// pm.environment.unset(\"cart_ids\");\r",
+									"\r",
+									"pm.environment.set(\"cart_ids\", j);\r",
+									"\r",
+									"m=pm.environment.get(\"cart_ids\");\r",
+									"\r",
+									"console.log(\"设置环境变量\",m)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "cart_ids[]",
+									"value": "{{cart_ids}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://www.testingedu.com.cn:8000/Home/Cart/delete.html?cart_ids[]={{cart_ids}}",
+							"protocol": "http",
+							"host": [
+								"www",
+								"testingedu",
+								"com",
+								"cn"
+							],
+							"port": "8000",
+							"path": [
+								"Home",
+								"Cart",
+								"delete.html"
+							],
+							"query": [
+								{
+									"key": "cart_ids[]",
+									"value": "{{cart_ids}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

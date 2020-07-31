@@ -1,0 +1,4708 @@
+{
+	"info": {
+		"_postman_id": "5c112652-5e8b-c352-50d3-007750f814af",
+		"name": "salehouseV2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "核心服务",
+			"item": []
+		},
+		{
+			"name": "基础服务(index)",
+			"item": [
+				{
+					"name": "0-城市列表-V6(版本号（6.1）",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "23c5e22d-7057-4906-be71-6c16ad603c3f",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.test(\"存在上海\", function () {",
+									"    for(var i in jsonData.Result){",
+									"        if(jsonData.Result[i].CityName == \"上海\"){",
+									"            cityname=jsonData.Result[i].CityName;",
+									"        }",
+									"    }",
+									"    pm.expect(cityname).to.eql(\"上海\");",
+									"});",
+									"",
+									"",
+									"if(jsonData.Result !=='' && pm.variables.get(\"mainhost\") ===\"https://mobileapi.centanet.com/\"){",
+									"    for(var i in jsonData.Result){",
+									"        if(jsonData.Result[i].CityName == \"广州\")",
+									"        {",
+									"            if(jsonData.Result[i].BizcommonUrl != \"https://apigz.centanet.com/bizcom/json/reply/\"){",
+									"                tests[jsonData.Result[i].CityName+\"bizcommonurl配置\"] = false;",
+									"            }",
+									"        }else if(jsonData.Result[i].CityName == \"深圳\"){",
+									"            if(jsonData.Result[i].BizcommonUrl != \"https://apisz.centanet.com/bizcom/json/reply/\"){",
+									"                tests[jsonData.Result[i].CityName+\"bizcommonurl配置\"] = false;",
+									"            }",
+									"        }else{",
+									"            if(jsonData.Result[i].BizcommonUrl != \"https://mobileapi.centanet.com/bizcom/json/reply/\"){",
+									"                tests[jsonData.Result[i].CityName+\"bizcommonurl配置\"] = false;",
+									"            }",
+									"        }",
+									"    }",
+									"}",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "652b4e7f-1c3d-4741-ae54-ed621396b84d",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "version",
+								"value": "{{version}}"
+							},
+							{
+								"key": "appversion",
+								"value": "{{appversion}}"
+							},
+							{
+								"key": "platform",
+								"value": "{{platform}}"
+							}
+						],
+						"url": "{{mainhost}}url",
+						"description": "获取城市列表测试环境"
+					},
+					"response": []
+				},
+				{
+					"name": "0-获取当前版本号",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "b2c98549-9c4d-49a1-8a7b-6da9549cd39f",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "version",
+								"value": "{{version}}"
+							},
+							{
+								"key": "appversion",
+								"value": "{{appversion}}"
+							},
+							{
+								"key": "platform",
+								"value": "{{platform}}"
+							},
+							{
+								"key": "cityen",
+								"value": "tj",
+								"type": "text"
+							}
+						],
+						"url": "{{mainhost}}appversion"
+					},
+					"response": []
+				},
+				{
+					"name": "0-城市列表-V7（版本号（6.2）",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "version",
+								"value": "{{version}}",
+								"type": "text"
+							},
+							{
+								"key": "appversion",
+								"value": "{{appversion}}",
+								"type": "text"
+							},
+							{
+								"key": "platform",
+								"value": "{{platform}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{mainhost}}CityUrlAddressList",
+							"host": [
+								"{{mainhost}}CityUrlAddressList"
+							],
+							"query": [
+								{
+									"key": "appversion",
+									"value": "{{appversion}}",
+									"disabled": true
+								},
+								{
+									"key": "platform",
+									"value": "{{platform}}",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "53d1f76f-e1c0-4fe4-bfc8-3e278a0498ea",
+						"type": "text/javascript",
+						"exec": [
+							"var version = 6.2;",
+							"var release = false; //是否为正式环境",
+							"",
+							"",
+							"if (version < 6.2 && release) {",
+							"    pm.environment.set(\"mainhost\", \"https://mobileapi.centanet.com/index/\");",
+							"} else if (version < 6.2 && !release) {",
+							"    pm.environment.set(\"mainhost\", \"http://114.80.110.197/index/\");",
+							"} else if (version >= 6.2 && !release) {",
+							"    pm.environment.set(\"mainhost\", \"http://10.4.18.194:8083/json/reply/\")",
+							"} else {",
+							"    pm.environment.set(\"mainhost\", \"https://mobileapi.centanet.com/v6/java/json/reply/\");",
+							"}",
+							"//pm.environment.set(\"mainhost\",\"https://10.4.18.33/\");",
+							"//",
+							"",
+							"pm.environment.set(\"version\", \"v\" + version);//接口的版本",
+							"pm.environment.set(\"appversion\", \"710\");",
+							"pm.environment.set(\"platform\", \"ios\");"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "b87ab275-8021-4632-a111-2320096d5fdb",
+						"type": "text/javascript",
+						"exec": [
+							"var body = JSON.parse(responseBody);",
+							"tests[\"ResultNo is 0\"] = body[\"ResultNo\"] == \"0\";",
+							"tests[\"Result isn't Null\"] = body.Result !==\"\";",
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "数据服务",
+			"item": [
+				{
+					"name": "0-首页",
+					"item": [
+						{
+							"name": "0-城市配置信息",
+							"item": [
+								{
+									"name": "Only-V4",
+									"item": [
+										{
+											"name": "0-城市配置信息",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"id": "86f9e94b-3011-4aa1-8808-94d693ef03cc",
+														"type": "text/javascript",
+														"exec": [
+															""
+														]
+													}
+												},
+												{
+													"listen": "prerequest",
+													"script": {
+														"id": "9ff4c346-5e13-4aa8-95f1-c9f656a87833",
+														"type": "text/javascript",
+														"exec": [
+															""
+														]
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "appversion",
+														"value": "{{appversion}}"
+													},
+													{
+														"key": "platform",
+														"value": "{{platform}}"
+													},
+													{
+														"key": "cityen",
+														"value": "{{cityen}}"
+													}
+												],
+												"url": "{{eshost}}GetBizUnitRequest"
+											},
+											"response": []
+										},
+										{
+											"name": "0-城市配置的版本信息",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"id": "e4099398-e452-4927-bda5-3792695010f2",
+														"type": "text/javascript",
+														"exec": [
+															""
+														]
+													}
+												},
+												{
+													"listen": "prerequest",
+													"script": {
+														"id": "9ff4c346-5e13-4aa8-95f1-c9f656a87833",
+														"type": "text/javascript",
+														"exec": [
+															""
+														]
+													}
+												}
+											],
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "appversion",
+														"value": "{{appversion}}"
+													},
+													{
+														"key": "platform",
+														"value": "{{platform}}"
+													},
+													{
+														"key": "cityen",
+														"value": "{{cityen}}"
+													}
+												],
+												"url": "{{eshost}}GetBizGlobalRequest"
+											},
+											"response": []
+										}
+									],
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "d3c7fad8-5d2c-4986-b67c-9e6b3bba3c42",
+												"type": "text/javascript",
+												"exec": [
+													"if(pm.variables.get(\"version\") !== \"V4\"){",
+													"",
+													"pm.environment.set(\"version\",\"V4\");//接口的版本",
+													"",
+													"const indexrequest = {",
+													"  url: pm.variables.get(\"mainhost\")+'index/url',",
+													"  method: 'GET',",
+													"  header: ['version:'+pm.variables.get(\"version\"),'appversion:'+pm.variables.get(\"appversion\"),'platform:'+pm.variables.get(\"platform\")],",
+													"};",
+													"",
+													"pm.sendRequest(indexrequest, function (err, response) {",
+													"    var data = response.json();",
+													"    //console.log(pm.variables.get(\"citycode\"));",
+													"    for(var i in data.Result){",
+													"        if(data.Result[i].Code === pm.variables.get(\"citycode\")){",
+													"            pm.environment.set(\"eshost\", data.Result[i].APIUrl);",
+													"\t\t\tpm.environment.set(\"userhost\", data.Result[i].UserCenterUrl);",
+													"\t\t\tpm.environment.set(\"xfhost\", data.Result[i].NewPropUrl);",
+													"            //console.log(pm.variables.get(\"host\"));",
+													"            pm.environment.set(\"cityen\", data.Result[i].CityEn);",
+													"        }",
+													"    }",
+													"});",
+													"}"
+												]
+											}
+										},
+										{
+											"listen": "test",
+											"script": {
+												"id": "65d07f93-1879-4b0b-a13b-e015f50a36c3",
+												"type": "text/javascript",
+												"exec": [
+													""
+												]
+											}
+										}
+									],
+									"_postman_isSubFolder": true
+								},
+								{
+									"name": "1-首页配置&其他配置",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "a7307cdc-8c5f-4bc9-8f10-68a2aa5adeb8",
+												"type": "text/javascript",
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"pm.test(\"交易配置\", function () {",
+													"    for(var i in jsonData.Result.H5){",
+													"        if(jsonData.Result.H5[i].key === \"TransactionSpeed\"){",
+													"            pm.expect(jsonData.Result.H5[i].Targetval).to.eql(\"https://esf.centanet.com/trade/index.aspx?phone={0}\");",
+													"        }else{",
+													"            return false;",
+													"        }",
+													"    }",
+													"    ",
+													"});"
+												]
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "9ff4c346-5e13-4aa8-95f1-c9f656a87833",
+												"type": "text/javascript",
+												"exec": [
+													""
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"url": "{{eshost}}GetPersonlizeRequest"
+									},
+									"response": []
+								},
+								{
+									"name": "1-筛选项配置",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "b88f42a8-f8b5-4707-bf9f-4e1e15b50dfd",
+												"type": "text/javascript",
+												"exec": [
+													""
+												]
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "8a15fd9c-c505-4134-bf14-275144a2e134",
+												"type": "text/javascript",
+												"exec": [
+													""
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"url": "{{eshost}}SearchDataRequest"
+									},
+									"response": []
+								},
+								{
+									"name": "1-获取二手区域板块",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "d7bc0aff-6b3a-4469-a98f-7caa71128070",
+												"type": "text/javascript",
+												"exec": [
+													""
+												]
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "cc5adf48-f7af-408e-8187-06be4862b1c4",
+												"type": "text/javascript",
+												"exec": [
+													""
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"url": "{{eshost}}GetAllGScopeRequest"
+									},
+									"response": []
+								},
+								{
+									"name": "1-获取二手地铁信息",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "28e2b881-1d54-412c-9bae-908858f51fa6",
+												"type": "text/javascript",
+												"exec": [
+													""
+												]
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "4e5c3763-6ffb-4049-aa46-ab5a834928af",
+												"type": "text/javascript",
+												"exec": [
+													""
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"url": "{{eshost}}GetRailLinesRequest"
+									},
+									"response": []
+								},
+								{
+									"name": "1-获取新房区域板块",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "fae417a3-9a84-4cf3-89de-15cfaaa24156",
+												"type": "text/javascript",
+												"exec": [
+													""
+												]
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "4b2d0816-c531-499c-9fba-6e0fdba3f3ee",
+												"type": "text/javascript",
+												"exec": [
+													""
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"url": "{{xfhost}}DistrictEstRequest"
+									},
+									"response": []
+								},
+								{
+									"name": "1-获取新房地铁",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "ffec393c-b808-47aa-afa8-972780b7f34b",
+												"type": "text/javascript",
+												"exec": [
+													""
+												]
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "cb3ea8cd-cab8-4ada-968d-3b8429ac6736",
+												"type": "text/javascript",
+												"exec": [
+													""
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"url": "{{xfhost}}RailRequest"
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "c62e705d-4687-4ed5-a1d0-cde2cbdece1c",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "dc8157ac-bc57-4359-9163-850faa38acab",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "1-首页滚动资讯",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "7dbf74f7-c311-49f1-9c85-4ec1051a62a4",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "appversion",
+										"value": "{{appversion}}"
+									},
+									{
+										"key": "platform",
+										"value": "{{platform}}"
+									},
+									{
+										"key": "cityen",
+										"value": "{{cityen}}"
+									}
+								],
+								"url": "{{eshost}}GetNewListRequest"
+							},
+							"response": []
+						},
+						{
+							"name": "1-新房行情",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "appversion",
+										"value": "{{appversion}}",
+										"type": "text"
+									},
+									{
+										"key": "platform",
+										"value": "{{platform}}",
+										"type": "text"
+									},
+									{
+										"key": "cityen",
+										"value": "{{cityen}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{xfhost}}NewPropDealRequest?DealDate=&GScopeId={{citycode}}&Length=2",
+									"host": [
+										"{{xfhost}}NewPropDealRequest"
+									],
+									"query": [
+										{
+											"key": "DealDate",
+											"value": ""
+										},
+										{
+											"key": "GScopeId",
+											"value": "{{citycode}}"
+										},
+										{
+											"key": "Length",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1-二手行情",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "appversion",
+										"value": "{{appversion}}",
+										"type": "text"
+									},
+									{
+										"key": "platform",
+										"value": "{{platform}}",
+										"type": "text"
+									},
+									{
+										"key": "cityen",
+										"value": "{{cityen}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{eshost}}GetEstateLastMonthDealDataByEstateCodeRequest?posttype=s&gscopelevel=1",
+									"host": [
+										"{{eshost}}GetEstateLastMonthDealDataByEstateCodeRequest"
+									],
+									"query": [
+										{
+											"key": "posttype",
+											"value": "s"
+										},
+										{
+											"key": "gscopelevel",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1-新房推荐",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "appversion",
+										"value": "{{appversion}}",
+										"type": "text"
+									},
+									{
+										"key": "platform",
+										"value": "{{platform}}",
+										"type": "text"
+									},
+									{
+										"key": "cityen",
+										"value": "{{cityen}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{xfhost}}NewPropExtInfoSearchRequest?IsTop=1&Length=6&OnlyRail=0&PageCount=6&PageIndex=0",
+									"host": [
+										"{{xfhost}}NewPropExtInfoSearchRequest"
+									],
+									"query": [
+										{
+											"key": "IsTop",
+											"value": "1"
+										},
+										{
+											"key": "Length",
+											"value": "6"
+										},
+										{
+											"key": "OnlyRail",
+											"value": "0"
+										},
+										{
+											"key": "PageCount",
+											"value": "6"
+										},
+										{
+											"key": "PageIndex",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "1-二手",
+					"item": [
+						{
+							"name": "2-二手房&租房",
+							"item": [
+								{
+									"name": "其他接口",
+									"item": [
+										{
+											"name": "1-获取房源合集列表bypostid",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "appversion",
+														"value": "{{appversion}}",
+														"type": "text"
+													},
+													{
+														"key": "platform",
+														"value": "{{platform}}",
+														"type": "text"
+													},
+													{
+														"key": "cityen",
+														"value": "{{cityen}}",
+														"type": "text"
+													}
+												],
+												"url": {
+													"raw": "{{eshost}}GetMultiplePostRequest?ImageHeight=300&ImageWidth=300&PostIds=2d4057bc-1cd5-cae4-6c27-08d671840e58,33a055f4-74a5-cd1b-4399-08d6a0952803",
+													"host": [
+														"{{eshost}}GetMultiplePostRequest"
+													],
+													"query": [
+														{
+															"key": "ImageHeight",
+															"value": "300"
+														},
+														{
+															"key": "ImageWidth",
+															"value": "300"
+														},
+														{
+															"key": "PostIds",
+															"value": "2d4057bc-1cd5-cae4-6c27-08d671840e58,33a055f4-74a5-cd1b-4399-08d6a0952803"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "1-根据地理位置获取房源信息",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "appversion",
+														"value": "{{appversion}}",
+														"type": "text"
+													},
+													{
+														"key": "platform",
+														"value": "{{platform}}",
+														"type": "text"
+													},
+													{
+														"key": "cityen",
+														"value": "{{cityen}}",
+														"type": "text"
+													}
+												],
+												"url": {
+													"raw": "{{eshost}}GetGeologyPostsRequest?ImageHeight=480&ImageWidth=640&Ishot=0&Lat=39.1527&Lng=117.252&MaxSalePrice=1562000&MinSalePrice=1278000&PageCount=10&PageIndex=1&PostType=S&RemovePostIds=33a055f4-74a5-cd1b-4399-08d6a0952803&Round=1000",
+													"host": [
+														"{{eshost}}GetGeologyPostsRequest"
+													],
+													"query": [
+														{
+															"key": "ImageHeight",
+															"value": "480"
+														},
+														{
+															"key": "ImageWidth",
+															"value": "640"
+														},
+														{
+															"key": "Ishot",
+															"value": "0"
+														},
+														{
+															"key": "Lat",
+															"value": "39.1527"
+														},
+														{
+															"key": "Lng",
+															"value": "117.252"
+														},
+														{
+															"key": "MaxSalePrice",
+															"value": "1562000"
+														},
+														{
+															"key": "MinSalePrice",
+															"value": "1278000"
+														},
+														{
+															"key": "PageCount",
+															"value": "10"
+														},
+														{
+															"key": "PageIndex",
+															"value": "1"
+														},
+														{
+															"key": "PostType",
+															"value": "S"
+														},
+														{
+															"key": "RemovePostIds",
+															"value": "33a055f4-74a5-cd1b-4399-08d6a0952803"
+														},
+														{
+															"key": "Round",
+															"value": "1000"
+														}
+													]
+												}
+											},
+											"response": []
+										}
+									],
+									"_postman_isSubFolder": true
+								},
+								{
+									"name": "1-二手房列表",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "07bef7ca-ca5c-4ac0-87fc-e3b3851cbc85",
+												"type": "text/javascript",
+												"exec": [
+													""
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}GetRegionPostsRequest?BigEstateCode=&Directions=&Distance=&EstateCode=&Feature=&Fitments=&Floors=&GScopeId=&ImageHeight=300&ImageWidth=300&IsHot=false&Keywords=&Lat=&Lng=&MaxGArea=&MaxRentPrice=&MaxSalePrice=&MinCreateTime=0&MinGArea=&MinRentPrice=&MinSalePrice=&NearRailWayIds=&OpdateRanges=&OrderByCriteria=&PageCount=10&PageIndex=1&PostType=S&PropertyTypes=&RailLineId=&RailWayId=&RegionId=&RemovePostids=&RentType=&RoomCountRanges=&Round=&StaffNo=",
+											"host": [
+												"{{eshost}}GetRegionPostsRequest"
+											],
+											"query": [
+												{
+													"key": "BigEstateCode",
+													"value": ""
+												},
+												{
+													"key": "Directions",
+													"value": ""
+												},
+												{
+													"key": "Distance",
+													"value": ""
+												},
+												{
+													"key": "EstateCode",
+													"value": ""
+												},
+												{
+													"key": "Feature",
+													"value": ""
+												},
+												{
+													"key": "Fitments",
+													"value": ""
+												},
+												{
+													"key": "Floors",
+													"value": ""
+												},
+												{
+													"key": "GScopeId",
+													"value": ""
+												},
+												{
+													"key": "ImageHeight",
+													"value": "300"
+												},
+												{
+													"key": "ImageWidth",
+													"value": "300"
+												},
+												{
+													"key": "IsHot",
+													"value": "false"
+												},
+												{
+													"key": "Keywords",
+													"value": ""
+												},
+												{
+													"key": "Lat",
+													"value": ""
+												},
+												{
+													"key": "Lng",
+													"value": ""
+												},
+												{
+													"key": "MaxGArea",
+													"value": ""
+												},
+												{
+													"key": "MaxRentPrice",
+													"value": ""
+												},
+												{
+													"key": "MaxSalePrice",
+													"value": ""
+												},
+												{
+													"key": "MinCreateTime",
+													"value": "0"
+												},
+												{
+													"key": "MinGArea",
+													"value": ""
+												},
+												{
+													"key": "MinRentPrice",
+													"value": ""
+												},
+												{
+													"key": "MinSalePrice",
+													"value": ""
+												},
+												{
+													"key": "NearRailWayIds",
+													"value": ""
+												},
+												{
+													"key": "OpdateRanges",
+													"value": ""
+												},
+												{
+													"key": "OrderByCriteria",
+													"value": ""
+												},
+												{
+													"key": "PageCount",
+													"value": "10"
+												},
+												{
+													"key": "PageIndex",
+													"value": "1"
+												},
+												{
+													"key": "PostType",
+													"value": "S"
+												},
+												{
+													"key": "PropertyTypes",
+													"value": ""
+												},
+												{
+													"key": "RailLineId",
+													"value": ""
+												},
+												{
+													"key": "RailWayId",
+													"value": ""
+												},
+												{
+													"key": "RegionId",
+													"value": ""
+												},
+												{
+													"key": "RemovePostids",
+													"value": ""
+												},
+												{
+													"key": "RentType",
+													"value": ""
+												},
+												{
+													"key": "RoomCountRanges",
+													"value": ""
+												},
+												{
+													"key": "Round",
+													"value": ""
+												},
+												{
+													"key": "StaffNo",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "2-二手房详情(ByAdsno)",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "c811cf95-1145-4642-8909-f2d9f8c53b88",
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}GetPostByAdsNoRequest?AdsNo=TJNK0004791598&PostType=S&WithoutDetail=1",
+											"host": [
+												"{{eshost}}GetPostByAdsNoRequest"
+											],
+											"query": [
+												{
+													"key": "ImageWidth",
+													"value": "640",
+													"disabled": true
+												},
+												{
+													"key": "AdsNo",
+													"value": "TJNK0004791598"
+												},
+												{
+													"key": "ImageHeight",
+													"value": "90",
+													"disabled": true
+												},
+												{
+													"key": "PostType",
+													"value": "S"
+												},
+												{
+													"key": "WithoutDetail",
+													"value": "1"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "2-获取经纪人房评",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}",
+												"type": "text"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}",
+												"type": "text"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}GetStaffCommentRequeset?AdsNo=tjhd0010803694&IsNeedComment=1&PageCount=1&PageIndex=1&PostId=33a055f4-74a5-cd1b-4399-08d6a0952803&PostType=s",
+											"host": [
+												"{{eshost}}GetStaffCommentRequeset"
+											],
+											"query": [
+												{
+													"key": "AdsNo",
+													"value": "tjhd0010803694"
+												},
+												{
+													"key": "IsNeedComment",
+													"value": "1"
+												},
+												{
+													"key": "PageCount",
+													"value": "1"
+												},
+												{
+													"key": "PageIndex",
+													"value": "1"
+												},
+												{
+													"key": "PostId",
+													"value": "33a055f4-74a5-cd1b-4399-08d6a0952803"
+												},
+												{
+													"key": "PostType",
+													"value": "s"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "2-获取房源所有图片",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}",
+												"type": "text"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}",
+												"type": "text"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}GetPostImagesRequest?ImageHeight=90&ImageWidth=640&PostId={{PostId}}",
+											"host": [
+												"{{eshost}}GetPostImagesRequest"
+											],
+											"query": [
+												{
+													"key": "ImageHeight",
+													"value": "90"
+												},
+												{
+													"key": "ImageWidth",
+													"value": "640"
+												},
+												{
+													"key": "PostId",
+													"value": "{{PostId}}"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "2-获取商圈视频",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}",
+												"type": "text"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}",
+												"type": "text"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}GetEstateVideoRequest?gscopeid=227218",
+											"host": [
+												"{{eshost}}GetEstateVideoRequest"
+											],
+											"query": [
+												{
+													"key": "gscopeid",
+													"value": "227218"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "2-获取房源带看数据",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}",
+												"type": "text"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}",
+												"type": "text"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}GetTakeSeeStaffEvaluationStatRequest?DayCount=-7&IsGetEveryKindScoreAll=0&IsGetGoodEvaluation=0&IsGetStarScoreCount=0&IsGetTakeToSeeCount=1&IsHaveReamark=1&LookPostId=&PageCount=7&PageIndex=1&PropId=121018111427A58AD833C5EB9CE153F0&StaffNo=&StaffNoList=",
+											"host": [
+												"{{eshost}}GetTakeSeeStaffEvaluationStatRequest"
+											],
+											"query": [
+												{
+													"key": "DayCount",
+													"value": "-7"
+												},
+												{
+													"key": "IsGetEveryKindScoreAll",
+													"value": "0"
+												},
+												{
+													"key": "IsGetGoodEvaluation",
+													"value": "0"
+												},
+												{
+													"key": "IsGetStarScoreCount",
+													"value": "0"
+												},
+												{
+													"key": "IsGetTakeToSeeCount",
+													"value": "1"
+												},
+												{
+													"key": "IsHaveReamark",
+													"value": "1"
+												},
+												{
+													"key": "LookPostId",
+													"value": ""
+												},
+												{
+													"key": "PageCount",
+													"value": "7"
+												},
+												{
+													"key": "PageIndex",
+													"value": "1"
+												},
+												{
+													"key": "PropId",
+													"value": "121018111427A58AD833C5EB9CE153F0"
+												},
+												{
+													"key": "StaffNo",
+													"value": ""
+												},
+												{
+													"key": "StaffNoList",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "2-获取带看&浏览量",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}",
+												"type": "text"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}",
+												"type": "text"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}GetPostTakeSeeCountAndViewCountRequest?AdsNo=tjhd0010803694&PostType=s&TakeSeeDaysTimeSpan=",
+											"host": [
+												"{{eshost}}GetPostTakeSeeCountAndViewCountRequest"
+											],
+											"query": [
+												{
+													"key": "AdsNo",
+													"value": "tjhd0010803694"
+												},
+												{
+													"key": "PostType",
+													"value": "s"
+												},
+												{
+													"key": "TakeSeeDaysTimeSpan",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "2-获取小区数据",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}",
+												"type": "text"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}",
+												"type": "text"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}GetEstateRequest?EstateCode=pegpwswxse&ImageHeight=76&ImageWidth=100",
+											"host": [
+												"{{eshost}}GetEstateRequest"
+											],
+											"query": [
+												{
+													"key": "EstateCode",
+													"value": "pegpwswxse"
+												},
+												{
+													"key": "ImageHeight",
+													"value": "76"
+												},
+												{
+													"key": "ImageWidth",
+													"value": "100"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "2-获取小区成交数据",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "21ce9f33-892f-4fd1-b967-4dd20938ac2a",
+												"exec": [
+													"pm.environment.set(\"now\",Date.parse(new Date())/1000);",
+													"pm.environment.set(\"begintime\",((Date.parse(new Date())/1000)-(3600*24*90)));",
+													"",
+													"//console.log(pm.variables.get(\"begintime\"));",
+													"//console.log(pm.variables.get(\"now\"));",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}",
+												"type": "text"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}",
+												"type": "text"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}GetDealDataRequest?MaxDealPrice=&MaxRoomCount=5&MaxSize=&MinDealPrice=&MinRoomCount=0&MinSize=&OrderByCriteria=&dealTimeBegin={{begintime}}&dealTimeEnd={{now}}&estateCode=pegpwswxse&gScopeId=&pagecount=3&pageindex=1&posttype=s&regionId=",
+											"host": [
+												"{{eshost}}GetDealDataRequest"
+											],
+											"query": [
+												{
+													"key": "MaxDealPrice",
+													"value": ""
+												},
+												{
+													"key": "MaxRoomCount",
+													"value": "5"
+												},
+												{
+													"key": "MaxSize",
+													"value": ""
+												},
+												{
+													"key": "MinDealPrice",
+													"value": ""
+												},
+												{
+													"key": "MinRoomCount",
+													"value": "0"
+												},
+												{
+													"key": "MinSize",
+													"value": ""
+												},
+												{
+													"key": "OrderByCriteria",
+													"value": ""
+												},
+												{
+													"key": "dealTimeBegin",
+													"value": "{{begintime}}"
+												},
+												{
+													"key": "dealTimeEnd",
+													"value": "{{now}}"
+												},
+												{
+													"key": "estateCode",
+													"value": "pegpwswxse"
+												},
+												{
+													"key": "gScopeId",
+													"value": ""
+												},
+												{
+													"key": "pagecount",
+													"value": "3"
+												},
+												{
+													"key": "pageindex",
+													"value": "1"
+												},
+												{
+													"key": "posttype",
+													"value": "s"
+												},
+												{
+													"key": "regionId",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "2-获取小区成交均价走势",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "c1398af7-42ed-48a2-81f2-7480aa743a12",
+												"exec": [
+													"pm.environment.set(\"now\",Date.parse(new Date())/1000);",
+													"pm.environment.set(\"begintime\",((Date.parse(new Date())/1000)-(3600*24*395)));",
+													"//console.log(pm.variables.get(\"begintime\"));",
+													"//console.log(pm.variables.get(\"now\"));"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "test",
+											"script": {
+												"id": "e41e8d78-b268-4a56-ad5f-0ab64e9b32f9",
+												"exec": [
+													"var data = pm.response.json();",
+													"//console.log(pm.variables.get(\"citycode\"));",
+													"",
+													"tests[\"用户收藏数量-获取成功\"]= data.ResultNo ===0"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}",
+												"type": "text"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}",
+												"type": "text"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}GetEstateDealAvgPriceNumHistoryRequest?DealTimeBegin={{begintime}}&DealTimeEnd={{now}}&PostType=s&RoomCount=0&estateCode=pegpwswxse",
+											"host": [
+												"{{eshost}}GetEstateDealAvgPriceNumHistoryRequest"
+											],
+											"query": [
+												{
+													"key": "DealTimeBegin",
+													"value": "{{begintime}}"
+												},
+												{
+													"key": "DealTimeEnd",
+													"value": "{{now}}"
+												},
+												{
+													"key": "PostType",
+													"value": "s"
+												},
+												{
+													"key": "RoomCount",
+													"value": "0"
+												},
+												{
+													"key": "estateCode",
+													"value": "pegpwswxse"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "2-获取板块的成交走势",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "a6410673-455b-40e1-9687-58a1631ec042",
+												"exec": [
+													"pm.environment.set(\"now\",Date.parse(new Date())/1000);",
+													"pm.environment.set(\"begintime\",((Date.parse(new Date())/1000)-(3600*24*395)));"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}",
+												"type": "text"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}",
+												"type": "text"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}GetGScopeDealAvgPriceNumHistoryRequest?DealTimeBegin={{begintime}}&DealTimeEnd={{now}}&GscopeId=227218&PostType=s&RoomCount=0",
+											"host": [
+												"{{eshost}}GetGScopeDealAvgPriceNumHistoryRequest"
+											],
+											"query": [
+												{
+													"key": "DealTimeBegin",
+													"value": "{{begintime}}"
+												},
+												{
+													"key": "DealTimeEnd",
+													"value": "{{now}}"
+												},
+												{
+													"key": "GscopeId",
+													"value": "227218"
+												},
+												{
+													"key": "PostType",
+													"value": "s"
+												},
+												{
+													"key": "RoomCount",
+													"value": "0"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "1-二手房智能搜索",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}TagModelRequest?ClientInfo=APP_android&TagCategory=S&Tag=1\n",
+											"host": [
+												"{{eshost}}TagModelRequest"
+											],
+											"query": [
+												{
+													"key": "ClientInfo",
+													"value": "APP_android"
+												},
+												{
+													"key": "TagCategory",
+													"value": "S"
+												},
+												{
+													"key": "Tag",
+													"value": "1\n"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "1-获取二手房列表推荐房源",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}",
+												"type": "text"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}",
+												"type": "text"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}GetGeologyPostsRequest?PostType=S&Lng=114.137515&Lat=22.579019&PageCount=10&ImageHeight=720&ImageWidth=960&Round=3000&PageIndex=1&RemovePostIds=8B472978-F2A3-C71D-28CA-08D62078F7FF",
+											"host": [
+												"{{eshost}}GetGeologyPostsRequest"
+											],
+											"query": [
+												{
+													"key": "PostType",
+													"value": "S"
+												},
+												{
+													"key": "Lng",
+													"value": "114.137515"
+												},
+												{
+													"key": "Lat",
+													"value": "22.579019"
+												},
+												{
+													"key": "PageCount",
+													"value": "10"
+												},
+												{
+													"key": "ImageHeight",
+													"value": "720"
+												},
+												{
+													"key": "ImageWidth",
+													"value": "960"
+												},
+												{
+													"key": "Round",
+													"value": "3000"
+												},
+												{
+													"key": "PageIndex",
+													"value": "1"
+												},
+												{
+													"key": "RemovePostIds",
+													"value": "8B472978-F2A3-C71D-28CA-08D62078F7FF"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "1-二手房推荐列表（深圳规则）",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "06d8cce5-692b-40bf-8f2b-23aba96ed897",
+												"exec": [
+													"const userlogin = {",
+													"  url: pm.variables.get(\"userhost\")+'UserLogin2Request',",
+													"  method: 'POST',",
+													"  header: ['version:'+pm.variables.get(\"version\"),'appversion:'+pm.variables.get(\"appversion\"),'platform:'+pm.variables.get(\"platform\")],",
+													"  body:{",
+													"    mode: 'raw',",
+													"    raw: JSON.stringify({ AppNo:'APP',Phone:'13714585575',PassWord:'13714585575a'})",
+													"  }",
+													"};",
+													"",
+													"pm.sendRequest(userlogin, function (err, response) {",
+													"    var data = response.json();",
+													"    //console.log(pm.variables.get(\"citycode\"));",
+													"    if(data.ResultNo === 0){",
+													"        pm.environment.set(\"UserId\", data.Result.UserId);",
+													"        pm.environment.set(\"UserToken\", data.Result.UserToken);",
+													"    }",
+													"    else{",
+													"        pm.environment.set(\"UserId\",\"U100218990\");",
+													"    }",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}",
+												"type": "text"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}",
+												"type": "text"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}GetPostResponseByIntentionRequest?Lng=113.939052&Lat=22.526086&posttype=s&Source=ershoufang&userid={{UserId}}&token={{UserToken}}",
+											"host": [
+												"{{eshost}}GetPostResponseByIntentionRequest"
+											],
+											"query": [
+												{
+													"key": "Lng",
+													"value": "113.939052"
+												},
+												{
+													"key": "Lat",
+													"value": "22.526086"
+												},
+												{
+													"key": "posttype",
+													"value": "s"
+												},
+												{
+													"key": "Source",
+													"value": "ershoufang"
+												},
+												{
+													"key": "userid",
+													"value": "{{UserId}}"
+												},
+												{
+													"key": "token",
+													"value": "{{UserToken}}"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "3-获取带看评价",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}",
+												"type": "text"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}",
+												"type": "text"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}GetTakeSeeStaffEvaluationStatRequest?IsGetEveryKindScoreAll=&IsGetGoodEvaluation=&IsGetStarScoreCount=&IsGetTakeToSeeCount=&IsHaveReamark=&LookPostId=&PageCount=10&PageIndex=1&PropId=121018111427A58AD833C5EB9CE153F0&StaffNo=&StaffNoList=",
+											"host": [
+												"{{eshost}}GetTakeSeeStaffEvaluationStatRequest"
+											],
+											"query": [
+												{
+													"key": "IsGetEveryKindScoreAll",
+													"value": ""
+												},
+												{
+													"key": "IsGetGoodEvaluation",
+													"value": ""
+												},
+												{
+													"key": "IsGetStarScoreCount",
+													"value": ""
+												},
+												{
+													"key": "IsGetTakeToSeeCount",
+													"value": ""
+												},
+												{
+													"key": "IsHaveReamark",
+													"value": ""
+												},
+												{
+													"key": "LookPostId",
+													"value": ""
+												},
+												{
+													"key": "PageCount",
+													"value": "10"
+												},
+												{
+													"key": "PageIndex",
+													"value": "1"
+												},
+												{
+													"key": "PropId",
+													"value": "121018111427A58AD833C5EB9CE153F0"
+												},
+												{
+													"key": "StaffNo",
+													"value": ""
+												},
+												{
+													"key": "StaffNoList",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "2-获取房源信息bypropid",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}",
+												"type": "text"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}",
+												"type": "text"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": []
+										},
+										"url": {
+											"raw": "{{eshost}}GetPostByUnitCodeOrPropIdRequest?propid=f3a43f60-7adf-4dca-92f9-88d0e48e6384",
+											"host": [
+												"{{eshost}}GetPostByUnitCodeOrPropIdRequest"
+											],
+											"query": [
+												{
+													"key": "propid",
+													"value": "f3a43f60-7adf-4dca-92f9-88d0e48e6384"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "2-经纪人&门店",
+							"item": [
+								{
+									"name": "1-经纪人-专家列表",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "bdb55a1b-2576-4876-af34-dc95fc6f6306",
+												"exec": [
+													"var jsonData = pm.response.json();",
+													"",
+													"for(var i in jsonData.Result){",
+													"    if(jsonData.Result[i].StaffSpeciality === ''){",
+													"        tests[jsonData.Result[i].StaffNo+\" \"+jsonData.Result[i].CnName+\"没有专家标签\"] = false;",
+													"    }",
+													"}"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "141604d9-a8f2-4e21-a75e-445aa694a8bf",
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}",
+												"type": "text"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}",
+												"type": "text"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}SearchStaffRequest?AnyNameLike=&GScopeId=&IsLoadStaffRemark=true&IsStaffSpeciality=true&MustHasPost=true&OrderByCriteria=&PageCount=10&PageIndex=0&RegionId=&StaffSpeciality=&StoreID=",
+											"host": [
+												"{{eshost}}SearchStaffRequest"
+											],
+											"query": [
+												{
+													"key": "AnyNameLike",
+													"value": ""
+												},
+												{
+													"key": "GScopeId",
+													"value": ""
+												},
+												{
+													"key": "IsLoadStaffRemark",
+													"value": "true"
+												},
+												{
+													"key": "IsStaffSpeciality",
+													"value": "true"
+												},
+												{
+													"key": "MustHasPost",
+													"value": "true"
+												},
+												{
+													"key": "OrderByCriteria",
+													"value": ""
+												},
+												{
+													"key": "PageCount",
+													"value": "10"
+												},
+												{
+													"key": "PageIndex",
+													"value": "0"
+												},
+												{
+													"key": "RegionId",
+													"value": ""
+												},
+												{
+													"key": "StaffSpeciality",
+													"value": ""
+												},
+												{
+													"key": "StoreID",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "1-门店列表",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}SearchStoreRequest?pageCount=10&MustHasPost=true&pageIndex=1\n",
+											"host": [
+												"{{eshost}}SearchStoreRequest"
+											],
+											"query": [
+												{
+													"key": "pageCount",
+													"value": "10"
+												},
+												{
+													"key": "MustHasPost",
+													"value": "true"
+												},
+												{
+													"key": "pageIndex",
+													"value": "1\n"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "1-经纪人店铺",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}StaffRequest?DomainAccount=&IsGetTag=true&Mobile=&MobileImport=&StaffID=&StaffNo=11203&TakeToSeeBeginTime=1524907995&TakeToSeeEndTime=",
+											"host": [
+												"{{eshost}}StaffRequest"
+											],
+											"query": [
+												{
+													"key": "DomainAccount",
+													"value": ""
+												},
+												{
+													"key": "IsGetTag",
+													"value": "true"
+												},
+												{
+													"key": "Mobile",
+													"value": ""
+												},
+												{
+													"key": "MobileImport",
+													"value": ""
+												},
+												{
+													"key": "StaffID",
+													"value": ""
+												},
+												{
+													"key": "StaffNo",
+													"value": "11203"
+												},
+												{
+													"key": "TakeToSeeBeginTime",
+													"value": "1524907995"
+												},
+												{
+													"key": "TakeToSeeEndTime",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "2-经纪人新房推荐",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "cityen",
+												"value": "gz"
+											}
+										],
+										"url": {
+											"raw": "{{xfhost}}NewPropExtInfoSearchRequest?Length=6&SortBy=4&StaffNo=11203&StartIndex=0",
+											"host": [
+												"{{xfhost}}NewPropExtInfoSearchRequest"
+											],
+											"query": [
+												{
+													"key": "Length",
+													"value": "6"
+												},
+												{
+													"key": "SortBy",
+													"value": "4"
+												},
+												{
+													"key": "StaffNo",
+													"value": "11203"
+												},
+												{
+													"key": "StartIndex",
+													"value": "0"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "2-小区",
+							"item": [
+								{
+									"name": "2-小区详情获取小区专家",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}GetSeniorStaffsToEstateRequest?PageIndex=1&EstateCode=0200020836&TagTop=3&PageCount=3",
+											"host": [
+												"{{eshost}}GetSeniorStaffsToEstateRequest"
+											],
+											"query": [
+												{
+													"key": "PageIndex",
+													"value": "1"
+												},
+												{
+													"key": "EstateCode",
+													"value": "0200020836"
+												},
+												{
+													"key": "TagTop",
+													"value": "3"
+												},
+												{
+													"key": "PageCount",
+													"value": "3"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "2-小区详情页",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}GetEstateRequest?ImageWidth=960&EstateCode=pebpwbwege&ImageHeight=720",
+											"host": [
+												"{{eshost}}GetEstateRequest"
+											],
+											"query": [
+												{
+													"key": "ImageWidth",
+													"value": "960"
+												},
+												{
+													"key": "EstateCode",
+													"value": "pebpwbwege"
+												},
+												{
+													"key": "ImageHeight",
+													"value": "720"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "1-新房",
+					"item": [
+						{
+							"name": "2-新房",
+							"item": [
+								{
+									"name": "10-新房列表",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "3ededfae-fe18-4a13-9f57-e42a045fa28d",
+												"type": "text/javascript",
+												"exec": [
+													""
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"url": {
+											"raw": "{{xfhost}}NewPropExtInfoSearchRequest?StartIndex=0&Length=10",
+											"host": [
+												"{{xfhost}}NewPropExtInfoSearchRequest"
+											],
+											"query": [
+												{
+													"key": "StartIndex",
+													"value": "0"
+												},
+												{
+													"key": "Length",
+													"value": "10"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "10-子盘列表",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "05b19bb2-3283-4741-a941-278ab9375f87",
+												"type": "text/javascript",
+												"exec": [
+													""
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"url": {
+											"raw": "{{xfhost}}NewPropExtInfoSearchRequest?Developer=&Distance=0&DistrictId=0&EstExtIds=&EstType=&GScopeId=0&GtRoomCnt=&HasActivity=0&IsTop=1&Length=6&MaxAveragePrice=0&MinAveragePrice=0&OnSale=0&OnlyRail=&OpDateBegin=&OpDateEnd=&RailLine=&RailWay=&RoomCnt=&SortBy=&StaffNo=&StartIndex=0&Tags=&Title=&UsedEstExtIds=0&lat=&lng=",
+											"host": [
+												"{{xfhost}}NewPropExtInfoSearchRequest"
+											],
+											"query": [
+												{
+													"key": "Developer",
+													"value": ""
+												},
+												{
+													"key": "Distance",
+													"value": "0"
+												},
+												{
+													"key": "DistrictId",
+													"value": "0"
+												},
+												{
+													"key": "EstExtIds",
+													"value": ""
+												},
+												{
+													"key": "EstType",
+													"value": ""
+												},
+												{
+													"key": "GScopeId",
+													"value": "0"
+												},
+												{
+													"key": "GtRoomCnt",
+													"value": ""
+												},
+												{
+													"key": "HasActivity",
+													"value": "0"
+												},
+												{
+													"key": "IsTop",
+													"value": "1"
+												},
+												{
+													"key": "Length",
+													"value": "6"
+												},
+												{
+													"key": "MaxAveragePrice",
+													"value": "0"
+												},
+												{
+													"key": "MinAveragePrice",
+													"value": "0"
+												},
+												{
+													"key": "OnSale",
+													"value": "0"
+												},
+												{
+													"key": "OnlyRail",
+													"value": ""
+												},
+												{
+													"key": "OpDateBegin",
+													"value": ""
+												},
+												{
+													"key": "OpDateEnd",
+													"value": ""
+												},
+												{
+													"key": "RailLine",
+													"value": ""
+												},
+												{
+													"key": "RailWay",
+													"value": ""
+												},
+												{
+													"key": "RoomCnt",
+													"value": ""
+												},
+												{
+													"key": "SortBy",
+													"value": ""
+												},
+												{
+													"key": "StaffNo",
+													"value": ""
+												},
+												{
+													"key": "StartIndex",
+													"value": "0"
+												},
+												{
+													"key": "Tags",
+													"value": ""
+												},
+												{
+													"key": "Title",
+													"value": ""
+												},
+												{
+													"key": "UsedEstExtIds",
+													"value": "0"
+												},
+												{
+													"key": "lat",
+													"value": ""
+												},
+												{
+													"key": "lng",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "10-新房列表翻页",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "9950c73d-d445-4390-a1fb-f8a1879c5c5a",
+												"type": "text/javascript",
+												"exec": [
+													""
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"url": {
+											"raw": "{{xfhost}}NewPropExtInfoSearchRequest?StartIndex=10&Length=10\n",
+											"host": [
+												"{{xfhost}}NewPropExtInfoSearchRequest"
+											],
+											"query": [
+												{
+													"key": "StartIndex",
+													"value": "10"
+												},
+												{
+													"key": "Length",
+													"value": "10\n"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "10-新房智能搜索",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "ClientInfo",
+													"value": "APP_android",
+													"type": "text"
+												},
+												{
+													"key": "TagCategory",
+													"value": "S",
+													"type": "text"
+												},
+												{
+													"key": "Tag",
+													"value": "万",
+													"type": "text"
+												}
+											]
+										},
+										"url": "{{bizhost}}TagModelRequest"
+									},
+									"response": []
+								},
+								{
+									"name": "11-新房详情-房源信息",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "663e4be1-831c-49ac-9fcb-17ff87e0a493",
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"url": {
+											"raw": "{{xfhost}}NewPropExtInfoRequest?EstExtId=10277",
+											"host": [
+												"{{xfhost}}NewPropExtInfoRequest"
+											],
+											"query": [
+												{
+													"key": "EstExtId",
+													"value": "10277"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "11-新房详情-获取户型",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "6012172b-1150-408e-a67e-02b469ec0f3b",
+												"type": "text/javascript",
+												"exec": [
+													""
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "cityen",
+												"value": "tj"
+											},
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											}
+										],
+										"url": {
+											"raw": "{{xfhost}}HouseTypesRequest?EstExtId=10244",
+											"host": [
+												"{{xfhost}}HouseTypesRequest"
+											],
+											"query": [
+												{
+													"key": "EstExtId",
+													"value": "10244"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "11-新房顾问点评",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"url": {
+											"raw": "{{xfhost}}CommentRequest?EstExtId=10383&IsAll=0&IsOnlyNew=&Length=1&StaffNo=&StartIndex=0&Target=",
+											"host": [
+												"{{xfhost}}CommentRequest"
+											],
+											"query": [
+												{
+													"key": "EstExtId",
+													"value": "10383"
+												},
+												{
+													"key": "IsAll",
+													"value": "0"
+												},
+												{
+													"key": "IsOnlyNew",
+													"value": ""
+												},
+												{
+													"key": "Length",
+													"value": "1"
+												},
+												{
+													"key": "StaffNo",
+													"value": ""
+												},
+												{
+													"key": "StartIndex",
+													"value": "0"
+												},
+												{
+													"key": "Target",
+													"value": ""
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "10-新房详情-周边小区",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}",
+												"type": "text"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}",
+												"type": "text"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}GetRegionEstatesRequest?Lng=112.925392&ImageHeight=300&PageCount=2&ImageWidth=300&MaxSaleAvgPrice=6809&MinSaleAvgPrice=5571&PageIndex=1&Lat=28.294027",
+											"host": [
+												"{{eshost}}GetRegionEstatesRequest"
+											],
+											"query": [
+												{
+													"key": "Lng",
+													"value": "112.925392"
+												},
+												{
+													"key": "ImageHeight",
+													"value": "300"
+												},
+												{
+													"key": "PageCount",
+													"value": "2"
+												},
+												{
+													"key": "ImageWidth",
+													"value": "300"
+												},
+												{
+													"key": "MaxSaleAvgPrice",
+													"value": "6809"
+												},
+												{
+													"key": "MinSaleAvgPrice",
+													"value": "5571"
+												},
+												{
+													"key": "PageIndex",
+													"value": "1"
+												},
+												{
+													"key": "Lat",
+													"value": "28.294027"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "10-新房详情-周边新盘",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}",
+												"type": "text"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}",
+												"type": "text"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{xfhost}}NewPropExtInfoSearchRequest?Lng=112.925392&Length=3&SortBy=2&Lat=28.294027",
+											"host": [
+												"{{xfhost}}NewPropExtInfoSearchRequest"
+											],
+											"query": [
+												{
+													"key": "Lng",
+													"value": "112.925392"
+												},
+												{
+													"key": "Length",
+													"value": "3"
+												},
+												{
+													"key": "SortBy",
+													"value": "2"
+												},
+												{
+													"key": "Lat",
+													"value": "28.294027"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "10-新房详情-周边小区1",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}",
+												"type": "text"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}",
+												"type": "text"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}GetGeoEstatesRequest?ImageHeight=240&ImageWidth=300&Lat=28.294027&Lng=112.925392&MaxSaleAvgPrice=6809&MinSaleAvgPrice=5571&OrderByCriteria=0&PageCount=2&PageIndex=1&Round=5000",
+											"host": [
+												"{{eshost}}GetGeoEstatesRequest"
+											],
+											"query": [
+												{
+													"key": "ImageHeight",
+													"value": "240"
+												},
+												{
+													"key": "ImageWidth",
+													"value": "300"
+												},
+												{
+													"key": "Lat",
+													"value": "28.294027"
+												},
+												{
+													"key": "Lng",
+													"value": "112.925392"
+												},
+												{
+													"key": "MaxSaleAvgPrice",
+													"value": "6809"
+												},
+												{
+													"key": "MinSaleAvgPrice",
+													"value": "5571"
+												},
+												{
+													"key": "OrderByCriteria",
+													"value": "0"
+												},
+												{
+													"key": "PageCount",
+													"value": "2"
+												},
+												{
+													"key": "PageIndex",
+													"value": "1"
+												},
+												{
+													"key": "Round",
+													"value": "5000"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "11-获取新房联系人",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}",
+												"type": "text"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}",
+												"type": "text"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}CalledListSpecialNewPropRequest?Client=APP&ExtId=10677",
+											"host": [
+												"{{eshost}}CalledListSpecialNewPropRequest"
+											],
+											"query": [
+												{
+													"key": "Client",
+													"value": "APP"
+												},
+												{
+													"key": "ExtId",
+													"value": "10677"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "11-新房详情-穿插广告",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "cityen",
+												"value": "{{cityen}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{xfhost}}SearchNewPropAdConfigRequest?adNames=楼盘详情页—中部穿插广告&adNames=楼盘详情页—底部穿插广告",
+											"host": [
+												"{{xfhost}}SearchNewPropAdConfigRequest"
+											],
+											"query": [
+												{
+													"key": "adNames",
+													"value": "楼盘详情页—中部穿插广告"
+												},
+												{
+													"key": "adNames",
+													"value": "楼盘详情页—底部穿插广告"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "2-新房首页",
+							"item": [
+								{
+									"name": "2-新房资讯",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "7dbf74f7-c311-49f1-9c85-4ec1051a62a4",
+												"type": "text/javascript",
+												"exec": [
+													""
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"url": {
+											"raw": "{{eshost}}GetNewListRequest?Type=xinfang",
+											"host": [
+												"{{eshost}}GetNewListRequest"
+											],
+											"query": [
+												{
+													"key": "Type",
+													"value": "xinfang"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "2-地图找房",
+					"item": [
+						{
+							"name": "2-地图找房-二手-区域级别",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "4e5709b2-ed5b-422f-bc36-373ffa82099b",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "appversion",
+										"value": "{{appversion}}"
+									},
+									{
+										"key": "platform",
+										"value": "{{platform}}"
+									},
+									{
+										"key": "cityen",
+										"value": "{{cityen}}"
+									}
+								],
+								"url": {
+									"raw": "{{eshost}}GetGScopeStatisticsRequest?PostType=s",
+									"host": [
+										"{{eshost}}GetGScopeStatisticsRequest"
+									],
+									"query": [
+										{
+											"key": "PostType",
+											"value": "s"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2-地图找房-新房",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "ec8f5479-07af-40e2-ac3d-492b5aa56bb4",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "appversion",
+										"value": "{{appversion}}"
+									},
+									{
+										"key": "platform",
+										"value": "{{platform}}"
+									},
+									{
+										"key": "cityen",
+										"value": "{{cityen}}"
+									}
+								],
+								"url": {
+									"raw": "{{xfhost}}NewPropExtInfoMapSearchRequest?Length=1000\n",
+									"host": [
+										"{{xfhost}}NewPropExtInfoMapSearchRequest"
+									],
+									"query": [
+										{
+											"key": "Length",
+											"value": "1000\n"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2-地图找房-新房-按坐标",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "cityen",
+										"value": "sz",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"StartIndex\":0,\"Length\":50,\"Rectangle\":{\"LeftTopLat\":\"22.569682591033303\",\"RightBottomLat\":\"22.55263021735437\",\"RightBottomLng\":\"114.23820828346507\",\"LeftTopLng\":\"114.24839690711924\"},\"DistrictId\":\"75517\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{xfhost}}NewPropExtInfoMapSearchRequest"
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "2-动态",
+					"item": [
+						{
+							"name": "2-官方消息",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "appversion",
+										"value": "{{appversion}}"
+									},
+									{
+										"key": "platform",
+										"value": "{{platform}}"
+									},
+									{
+										"key": "cityen",
+										"value": "{{cityen}}"
+									}
+								],
+								"url": {
+									"raw": "{{eshost}}GetPublicRequest?Fun=SysInfo&Param=%7B%0A%20%20%22Length%22%20%3A%20%221%22%2C%0A%20%20%22StartIndex%22%20%3A%20%220%22%2C%0A%20%20%22Platform%22%20%3A%20%22ios%22%2C%0A%20%20%22PushTime%22%20%3A%20%22%22%2C%0A%20%20%22SysInfoId%22%20%3A%20%22%22%0A%7D&ServiceType=postmg",
+									"host": [
+										"{{eshost}}GetPublicRequest"
+									],
+									"query": [
+										{
+											"key": "Fun",
+											"value": "SysInfo"
+										},
+										{
+											"key": "Param",
+											"value": "%7B%0A%20%20%22Length%22%20%3A%20%221%22%2C%0A%20%20%22StartIndex%22%20%3A%20%220%22%2C%0A%20%20%22Platform%22%20%3A%20%22ios%22%2C%0A%20%20%22PushTime%22%20%3A%20%22%22%2C%0A%20%20%22SysInfoId%22%20%3A%20%22%22%0A%7D"
+										},
+										{
+											"key": "ServiceType",
+											"value": "postmg"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "2-行情",
+					"item": [
+						{
+							"name": "1-二手近期成交历史",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "ce8ad03c-c590-4af3-b352-0442b40ff89c",
+										"exec": [
+											"postman.setGlobalVariable(\"now\", new Date());",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "appversion",
+										"value": "{{appversion}}"
+									},
+									{
+										"key": "platform",
+										"value": "{{platform}}"
+									},
+									{
+										"key": "cityen",
+										"value": "{{cityen}}"
+									}
+								],
+								"url": {
+									"raw": "{{eshost}}GetDealDataRequest?MaxDealPrice=&MaxSize=&MinDealPrice=&MinRoomCount=0&MinSize=&OrderByCriteria=DealTimeDesc&dealTimeBegin=&dealTimeEnd={{now}}&estateCode=&gScopeId=&pagecount=10&pageindex=1&posttype=s&regionId=",
+									"host": [
+										"{{eshost}}GetDealDataRequest"
+									],
+									"query": [
+										{
+											"key": "MaxDealPrice",
+											"value": ""
+										},
+										{
+											"key": "MaxSize",
+											"value": ""
+										},
+										{
+											"key": "MinDealPrice",
+											"value": ""
+										},
+										{
+											"key": "MinRoomCount",
+											"value": "0"
+										},
+										{
+											"key": "MinSize",
+											"value": ""
+										},
+										{
+											"key": "OrderByCriteria",
+											"value": "DealTimeDesc"
+										},
+										{
+											"key": "dealTimeBegin",
+											"value": ""
+										},
+										{
+											"key": "dealTimeEnd",
+											"value": "{{now}}"
+										},
+										{
+											"key": "estateCode",
+											"value": ""
+										},
+										{
+											"key": "gScopeId",
+											"value": ""
+										},
+										{
+											"key": "pagecount",
+											"value": "10"
+										},
+										{
+											"key": "pageindex",
+											"value": "1"
+										},
+										{
+											"key": "posttype",
+											"value": "s"
+										},
+										{
+											"key": "regionId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "2-个人中心",
+					"item": [
+						{
+							"name": "1-登录",
+							"item": [
+								{
+									"name": "1-账号登录",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "f30928e7-0dea-41ea-b377-8d9a155a125f",
+												"exec": [
+													"var data = pm.response.json();",
+													"//console.log(pm.variables.get(\"citycode\"));",
+													"if(data.ResultNo === 0){",
+													"    pm.environment.set(\"UserId\", data.Result.UserId);",
+													"    pm.environment.set(\"UserToken\", data.Result.UserToken);",
+													"}",
+													"",
+													"tests[\"登录成功\"]= data.ResultNo === 0"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "284febe2-0545-4fff-83fc-55e90c0a4012",
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}",
+												"type": "text"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}",
+												"type": "text"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}",
+												"type": "text"
+											},
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/x-www-form-urlencoded",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "CityCode",
+													"value": "{{citycode}}",
+													"type": "text"
+												},
+												{
+													"key": "AppNo",
+													"value": "APP",
+													"type": "text"
+												},
+												{
+													"key": "Phone",
+													"value": "13344444444",
+													"type": "text"
+												},
+												{
+													"key": "PassWord",
+													"value": "123456",
+													"type": "text"
+												},
+												{
+													"key": "VerificationCode",
+													"value": "",
+													"type": "text",
+													"disabled": true
+												}
+											]
+										},
+										"url": "{{userhost}}UserLogin2Request"
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "694bfee4-42f0-43c8-99db-493d16188f0f",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "97878947-b123-45e6-a084-0b00d8562b9a",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "2-个人动态",
+							"item": [
+								{
+									"name": "1-获取收藏房源变化列表",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "f007b15b-336c-4df9-aaad-282e9f7706c5",
+												"exec": [
+													"if(pm.variables.get(\"UserToken\") == null){",
+													"const userlogin = {",
+													"  url: pm.variables.get(\"userhost\")+'UserLogin2Request',",
+													"  method: 'POST',",
+													"  header: ['version:'+pm.variables.get(\"version\"),'appversion:'+pm.variables.get(\"appversion\"),'platform:'+pm.variables.get(\"platform\")],",
+													"  body:{",
+													"    mode: 'raw',",
+													"    raw: JSON.stringify({ AppNo:'APP',Phone:'13714585575',PassWord:'13714585575a'})",
+													"  }",
+													"};",
+													"",
+													"pm.sendRequest(userlogin, function (err, response) {",
+													"    var data = response.json();",
+													"    //console.log(pm.variables.get(\"citycode\"));",
+													"    if(data.ResultNo === 0){",
+													"        pm.environment.set(\"UserId\", data.Result.UserId);",
+													"        pm.environment.set(\"UserToken\", data.Result.UserToken);",
+													"    }",
+													"    else{",
+													"        pm.environment.set(\"UserId\",\"U100218990\");",
+													"        pm.environment.set(\"UserToken\",\"bvqmYfuDXOLZGrwVcHi8qDppA/Xw2kO20IIkKV/mKu8q05uF5KIZ9TYbcakwZ6sHR3azdXNM4U9ED2JPNRuRjuVBZzhezjcGLgWVszfoei4lfkXQcYI9bOlL2l83H4TYvDuH/GuRAB-HNTy9WE-P6g__\");",
+													"    }",
+													"});",
+													"    console.log(pm.variables.get(\"UserToken\"));",
+													"}",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "test",
+											"script": {
+												"id": "856b2f87-4d7f-4b38-b2ba-6a53d8003f30",
+												"exec": [
+													"var data = pm.response.json();",
+													"//console.log(pm.variables.get(\"citycode\"));",
+													"",
+													"tests[\"收藏信息变化-获取成功\"]= data.ResultNo !== 401"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "appversion",
+												"value": "{{appversion}}",
+												"type": "text"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}",
+												"type": "text"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{userhost}}CollectInfoChangeListRequest?ChangeTypeList=chengjiao,online,pricechange,estcount&CityCode={{citycode}}&Count=1000&FirstIndex=1&IsDel=false&IsRead=0&UserToken={{UserToken}}",
+											"host": [
+												"{{userhost}}CollectInfoChangeListRequest"
+											],
+											"query": [
+												{
+													"key": "ChangeTypeList",
+													"value": "chengjiao,online,pricechange,estcount"
+												},
+												{
+													"key": "CityCode",
+													"value": "{{citycode}}"
+												},
+												{
+													"key": "Count",
+													"value": "1000"
+												},
+												{
+													"key": "FirstIndex",
+													"value": "1"
+												},
+												{
+													"key": "IsDel",
+													"value": "false"
+												},
+												{
+													"key": "IsRead",
+													"value": "0"
+												},
+												{
+													"key": "UserToken",
+													"value": "{{UserToken}}"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "2-个人委托",
+							"item": [
+								{
+									"name": "获取A+委托信息进度",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "20d63114-229b-4fa5-b352-bac017363a8e",
+												"exec": [
+													"//pm.environment.set(\"userhost\", \"https://mobileapi.centanet.com/passport/json/reply/\");",
+													"//pm.environment.set(\"userhost\", \"http://10.58.8.232:219/json/reply/\");"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/x-www-form-urlencoded"
+											},
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "CityCode",
+													"value": "022",
+													"type": "text"
+												},
+												{
+													"key": "EntrustType",
+													"value": "s",
+													"type": "text"
+												},
+												{
+													"key": "PropertyKeyId",
+													"value": "6982149d-4900-c407-037a-08d6746aa0a7",
+													"type": "text"
+												},
+												{
+													"key": "TopCount",
+													"value": "10",
+													"type": "text"
+												}
+											]
+										},
+										"url": "{{userhost}}TrustScheduleRequest"
+									},
+									"response": []
+								},
+								{
+									"name": "手机号获取委托信息",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "a2b6325b-0638-4fbe-afad-052d8a9e3b28",
+												"exec": [
+													"//pm.environment.set(\"userhost\", \"https://mobileapi.centanet.com/passport/json/reply/\");",
+													"//pm.environment.set(\"userhost\", \"http://10.58.8.232:219/json/reply/\");"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/x-www-form-urlencoded"
+											},
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "mobilePhone",
+													"value": "13166666666",
+													"type": "text"
+												},
+												{
+													"key": "topCount",
+													"value": "100",
+													"type": "text"
+												},
+												{
+													"key": "IsOrderbyTrustsCheduleTimeDesc",
+													"value": "true",
+													"type": "text",
+													"disabled": true
+												},
+												{
+													"key": "citycode",
+													"value": "022",
+													"type": "text"
+												},
+												{
+													"key": "IsGetOneItemByTrustsCheduleTimeDesc",
+													"value": "true",
+													"type": "text",
+													"disabled": true
+												}
+											]
+										},
+										"url": "{{userhost}}TrustInfoRequest"
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "2-个人带看信息",
+							"item": [
+								{
+									"name": "手机号获取带看信息",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "a2b6325b-0638-4fbe-afad-052d8a9e3b28",
+												"type": "text/javascript",
+												"exec": [
+													"//pm.environment.set(\"userhost\", \"https://mobileapi.centanet.com/passport/json/reply/\");",
+													"//pm.environment.set(\"userhost\", \"http://10.58.8.232:219/json/reply/\");"
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/x-www-form-urlencoded"
+											},
+											{
+												"key": "appversion",
+												"value": "{{appversion}}"
+											},
+											{
+												"key": "platform",
+												"value": "{{platform}}"
+											},
+											{
+												"key": "cityen",
+												"value": "{{cityen}}"
+											}
+										],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "customermobile",
+													"value": "13166026013",
+													"type": "text"
+												},
+												{
+													"key": "citycode",
+													"value": "{{citycode}}",
+													"type": "text"
+												}
+											]
+										},
+										"url": "{{userhost}}LookPostRequest"
+									},
+									"response": []
+								},
+								{
+									"name": "查看评分情况",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://10.58.8.232:219/json/reply/SystemMessageRequest?EvaluationType=TakeToSee&UserId=U100061492&CityCode=022&Count=1000&FirstIndex=1&ItemIdList=11591f46-f6ef-c226-ea6c-08d5f200d8a3",
+											"protocol": "http",
+											"host": [
+												"10",
+												"58",
+												"8",
+												"232"
+											],
+											"port": "219",
+											"path": [
+												"json",
+												"reply",
+												"SystemMessageRequest"
+											],
+											"query": [
+												{
+													"key": "EvaluationType",
+													"value": "TakeToSee"
+												},
+												{
+													"key": "UserId",
+													"value": "U100061492"
+												},
+												{
+													"key": "CityCode",
+													"value": "022"
+												},
+												{
+													"key": "Count",
+													"value": "1000"
+												},
+												{
+													"key": "FirstIndex",
+													"value": "1"
+												},
+												{
+													"key": "ItemIdList",
+													"value": "11591f46-f6ef-c226-ea6c-08d5f200d8a3"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "1-获取城市信息",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "version",
+										"value": "{{version}}",
+										"type": "text"
+									},
+									{
+										"key": "appversion",
+										"value": "{{appversion}}",
+										"type": "text"
+									},
+									{
+										"key": "platform",
+										"value": "{{platform}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{userhost}}SearchCityDataItemRequest?CityCode={{citycode}}",
+									"host": [
+										"{{userhost}}SearchCityDataItemRequest"
+									],
+									"query": [
+										{
+											"key": "CityCode",
+											"value": "{{citycode}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1-获取收藏",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "69e54d2e-d741-4b1b-935e-571db40aadc4",
+										"exec": [
+											"if(pm.variables.get(\"UserToken\") == null){",
+											"const userlogin = {",
+											"  url: pm.variables.get(\"userhost\")+'UserLogin2Request',",
+											"  method: 'POST',",
+											"  header: ['version:'+pm.variables.get(\"version\"),'appversion:'+pm.variables.get(\"appversion\"),'platform:'+pm.variables.get(\"platform\")],",
+											"  body:{",
+											"    mode: 'raw',",
+											"    raw: JSON.stringify({ AppNo:'APP',Phone:'13311111111',PassWord:'123456'})",
+											"  }",
+											"};",
+											"",
+											"pm.sendRequest(userlogin, function (err, response) {",
+											"    var data = response.json();",
+											"    //console.log(pm.variables.get(\"citycode\"));",
+											"    if(data.ResultNo === 0){",
+											"        pm.environment.set(\"UserId\", data.Result.UserId);",
+											"        pm.environment.set(\"UserToken\", data.Result.UserToken);",
+											"    }",
+											"    else{",
+											"        pm.environment.set(\"UserId\",\"U100218990\");",
+											"        pm.environment.set(\"UserToken\",\"bvqmYfuDXOLZGrwVcHi8qDppA/Xw2kO20IIkKV/mKu8q05uF5KIZ9TYbcakwZ6sHR3azdXNM4U9ED2JPNRuRjuVBZzhezjcGLgWVszfoei4lfkXQcYI9bOlL2l83H4TYvDuH/GuRAB-HNTy9WE-P6g__\");",
+											"    }",
+											"});",
+											"    console.log(pm.variables.get(\"UserToken\"));",
+											"}",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "69c39e78-8734-491d-b4d5-6cf87e482e75",
+										"exec": [
+											"var data = pm.response.json();",
+											"//console.log(pm.variables.get(\"citycode\"));",
+											"",
+											"tests[\"收藏数量-获取成功\"]= data.ResultNo !== 401"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{userhost}}CollectInfoListRequest?CityCode={{citycode}}&CollectValue=&Count=0&FirstIndex=1&IsDel=0&Source=&SourceList=ershoufang,zufang,Cxiaoqu,loupan&UserToken={{UserToken}}",
+									"host": [
+										"{{userhost}}CollectInfoListRequest"
+									],
+									"query": [
+										{
+											"key": "CityCode",
+											"value": "{{citycode}}"
+										},
+										{
+											"key": "CollectValue",
+											"value": ""
+										},
+										{
+											"key": "Count",
+											"value": "0"
+										},
+										{
+											"key": "FirstIndex",
+											"value": "1"
+										},
+										{
+											"key": "IsDel",
+											"value": "0"
+										},
+										{
+											"key": "Source",
+											"value": ""
+										},
+										{
+											"key": "SourceList",
+											"value": "ershoufang,zufang,Cxiaoqu,loupan"
+										},
+										{
+											"key": "UserToken",
+											"value": "{{UserToken}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1-获取活动",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "4a020e80-9552-4dba-bf5a-15adf98f2507",
+										"exec": [
+											"if(pm.variables.get(\"UserToken\") == null){",
+											"const userlogin = {",
+											"  url: pm.variables.get(\"userhost\")+'UserLogin2Request',",
+											"  method: 'POST',",
+											"  header: ['version:'+pm.variables.get(\"version\"),'appversion:'+pm.variables.get(\"appversion\"),'platform:'+pm.variables.get(\"platform\")],",
+											"  body:{",
+											"    mode: 'raw',",
+											"    raw: JSON.stringify({ AppNo:'APP',Phone:'13714585575',PassWord:'13714585575a'})",
+											"  }",
+											"};",
+											"",
+											"pm.sendRequest(userlogin, function (err, response) {",
+											"    var data = response.json();",
+											"    //console.log(pm.variables.get(\"citycode\"));",
+											"    if(data.ResultNo === 0){",
+											"        pm.environment.set(\"UserId\", data.Result.UserId);",
+											"        pm.environment.set(\"UserToken\", data.Result.UserToken);",
+											"    }",
+											"    else{",
+											"        pm.environment.set(\"UserId\",\"U100218990\");",
+											"        pm.environment.set(\"UserToken\",\"bvqmYfuDXOLZGrwVcHi8qDppA/Xw2kO20IIkKV/mKu8q05uF5KIZ9TYbcakwZ6sHR3azdXNM4U9ED2JPNRuRjuVBZzhezjcGLgWVszfoei4lfkXQcYI9bOlL2l83H4TYvDuH/GuRAB-HNTy9WE-P6g__\");",
+											"    }",
+											"});",
+											"    console.log(pm.variables.get(\"UserToken\"));",
+											"}",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "f299a70f-fff4-4cb3-aa35-fd0fa89c6fb4",
+										"exec": [
+											"var data = pm.response.json();",
+											"//console.log(pm.variables.get(\"citycode\"));",
+											"",
+											"tests[\"用户订阅-获取成功\"]= data.ResultNo !== 401"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "appversion",
+										"value": "{{appversion}}",
+										"type": "text"
+									},
+									{
+										"key": "platform",
+										"value": "{{platform}}",
+										"type": "text"
+									},
+									{
+										"key": "cityen",
+										"value": "{{cityen}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{userhost}}UserBookingListRequest?AppName={{AppName}}&CityCode={{citycode}}&Count=1000&FirstIndex=0&UserToken={{UserToken}}",
+									"host": [
+										"{{userhost}}UserBookingListRequest"
+									],
+									"query": [
+										{
+											"key": "AppName",
+											"value": "{{AppName}}"
+										},
+										{
+											"key": "CityCode",
+											"value": "{{citycode}}"
+										},
+										{
+											"key": "Count",
+											"value": "1000"
+										},
+										{
+											"key": "FirstIndex",
+											"value": "0"
+										},
+										{
+											"key": "UserToken",
+											"value": "{{UserToken}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1-获取订阅",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "cf37e863-5d29-4868-b858-a389948084bd",
+										"exec": [
+											"if(pm.variables.get(\"UserToken\") == null){",
+											"const userlogin = {",
+											"  url: pm.variables.get(\"userhost\")+'UserLogin2Request',",
+											"  method: 'POST',",
+											"  header: ['version:'+pm.variables.get(\"version\"),'appversion:'+pm.variables.get(\"appversion\"),'platform:'+pm.variables.get(\"platform\")],",
+											"  body:{",
+											"    mode: 'raw',",
+											"    raw: JSON.stringify({ AppNo:'APP',Phone:'13714585575',PassWord:'13714585575a'})",
+											"  }",
+											"};",
+											"",
+											"pm.sendRequest(userlogin, function (err, response) {",
+											"    var data = response.json();",
+											"    //console.log(pm.variables.get(\"citycode\"));",
+											"    if(data.ResultNo === 0){",
+											"        pm.environment.set(\"UserId\", data.Result.UserId);",
+											"        pm.environment.set(\"UserToken\", data.Result.UserToken);",
+											"    }",
+											"    else{",
+											"        pm.environment.set(\"UserId\",\"U100218990\");",
+											"        pm.environment.set(\"UserToken\",\"bvqmYfuDXOLZGrwVcHi8qDppA/Xw2kO20IIkKV/mKu8q05uF5KIZ9TYbcakwZ6sHR3azdXNM4U9ED2JPNRuRjuVBZzhezjcGLgWVszfoei4lfkXQcYI9bOlL2l83H4TYvDuH/GuRAB-HNTy9WE-P6g__\");",
+											"    }",
+											"});",
+											"    console.log(pm.variables.get(\"UserToken\"));",
+											"}",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "b5374723-43e7-4f4a-8e9c-a0477677499f",
+										"exec": [
+											"var data = pm.response.json();",
+											"//console.log(pm.variables.get(\"citycode\"));",
+											"",
+											"tests[\"用户订阅-获取成功\"]= data.ResultNo !== 401"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "appversion",
+										"value": "{{appversion}}",
+										"type": "text"
+									},
+									{
+										"key": "platform",
+										"value": "{{platform}}",
+										"type": "text"
+									},
+									{
+										"key": "cityen",
+										"value": "{{cityen}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{userhost}}IntentionRequest?AppName=&CityCode={{citycode}}&Count=1&FirstIndex=1&IntentionID=&Source=&UserToken={{UserToken}}",
+									"host": [
+										"{{userhost}}IntentionRequest"
+									],
+									"query": [
+										{
+											"key": "AppName",
+											"value": ""
+										},
+										{
+											"key": "CityCode",
+											"value": "{{citycode}}"
+										},
+										{
+											"key": "Count",
+											"value": "1"
+										},
+										{
+											"key": "FirstIndex",
+											"value": "1"
+										},
+										{
+											"key": "IntentionID",
+											"value": ""
+										},
+										{
+											"key": "Source",
+											"value": ""
+										},
+										{
+											"key": "UserToken",
+											"value": "{{UserToken}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1-获取评价系统消息",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "c3200f1c-84d4-41f2-9bb8-502d3c8cde6b",
+										"exec": [
+											"if(pm.variables.get(\"UserToken\") == null){",
+											"const userlogin = {",
+											"  url: pm.variables.get(\"userhost\")+'UserLogin2Request',",
+											"  method: 'POST',",
+											"  header: ['version:'+pm.variables.get(\"version\"),'appversion:'+pm.variables.get(\"appversion\"),'platform:'+pm.variables.get(\"platform\")],",
+											"  body:{",
+											"    mode: 'raw',",
+											"    raw: JSON.stringify({ AppNo:'APP',Phone:'13714585575',PassWord:'13714585575a'})",
+											"  }",
+											"};",
+											"",
+											"pm.sendRequest(userlogin, function (err, response) {",
+											"    var data = response.json();",
+											"    //console.log(pm.variables.get(\"citycode\"));",
+											"    if(data.ResultNo === 0){",
+											"        pm.environment.set(\"UserId\", data.Result.UserId);",
+											"        pm.environment.set(\"UserToken\", data.Result.UserToken);",
+											"    }",
+											"    else{",
+											"        pm.environment.set(\"UserId\",\"U100218990\");",
+											"        pm.environment.set(\"UserToken\",\"bvqmYfuDXOLZGrwVcHi8qDppA/Xw2kO20IIkKV/mKu8q05uF5KIZ9TYbcakwZ6sHR3azdXNM4U9ED2JPNRuRjuVBZzhezjcGLgWVszfoei4lfkXQcYI9bOlL2l83H4TYvDuH/GuRAB-HNTy9WE-P6g__\");",
+											"    }",
+											"});",
+											"    console.log(pm.variables.get(\"UserToken\"));",
+											"}",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "6d83b5e3-8a0a-45b7-bcaa-75eb1009c275",
+										"exec": [
+											"var data = pm.response.json();",
+											"//console.log(pm.variables.get(\"citycode\"));",
+											"",
+											"tests[\"用户订阅-获取成功\"]= data.ResultNo !== 401"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "appversion",
+										"value": "{{appversion}}",
+										"type": "text"
+									},
+									{
+										"key": "platform",
+										"value": "{{platform}}",
+										"type": "text"
+									},
+									{
+										"key": "cityen",
+										"value": "{{cityen}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{userhost}}SystemMessageRequest?CityCode={{citycode}}&Count=1&FirstIndex=1&IsRead=0&UserId={{UserId}}&UserToken={{UserToken}}",
+									"host": [
+										"{{userhost}}SystemMessageRequest"
+									],
+									"query": [
+										{
+											"key": "CityCode",
+											"value": "{{citycode}}"
+										},
+										{
+											"key": "Count",
+											"value": "1"
+										},
+										{
+											"key": "FirstIndex",
+											"value": "1"
+										},
+										{
+											"key": "IsRead",
+											"value": "0"
+										},
+										{
+											"key": "UserId",
+											"value": "{{UserId}}"
+										},
+										{
+											"key": "UserToken",
+											"value": "{{UserToken}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1-获取收藏数量",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "3cd7229a-2010-450f-b235-5974257d301d",
+										"exec": [
+											"var data = pm.response.json();",
+											"//console.log(pm.variables.get(\"citycode\"));",
+											"",
+											"tests[\"用户收藏数量-获取成功\"]= data.ResultNo !== 401"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "appversion",
+										"value": "{{appversion}}",
+										"type": "text"
+									},
+									{
+										"key": "platform",
+										"value": "{{platform}}",
+										"type": "text"
+									},
+									{
+										"key": "cityen",
+										"value": "{{cityen}}",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "CityCode",
+											"value": "{{citycode}}",
+											"type": "text"
+										},
+										{
+											"key": "CollectValueList",
+											"value": "33a055f4-74a5-cd1b-4399-08d6a0952803",
+											"type": "text"
+										},
+										{
+											"key": "Source",
+											"value": "ershoufang",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{userhost}}CollectInfoCountRequest"
+							},
+							"response": []
+						},
+						{
+							"name": "1-获取约看信息",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "44cede72-0ba7-424e-88d5-f1cd7d3b06a8",
+										"exec": [
+											"if(pm.variables.get(\"UserToken\") == null){",
+											"const userlogin = {",
+											"  url: pm.variables.get(\"userhost\")+'UserLogin2Request',",
+											"  method: 'POST',",
+											"  header: ['version:'+pm.variables.get(\"version\"),'appversion:'+pm.variables.get(\"appversion\"),'platform:'+pm.variables.get(\"platform\")],",
+											"  body:{",
+											"    mode: 'raw',",
+											"    raw: JSON.stringify({ AppNo:'APP',Phone:'1331111111',PassWord:'123456'})",
+											"  }",
+											"};",
+											"",
+											"pm.sendRequest(userlogin, function (err, response) {",
+											"    var data = response.json();",
+											"    //console.log(pm.variables.get(\"citycode\"));",
+											"    if(data.ResultNo === 0){",
+											"        pm.environment.set(\"UserId\", data.Result.UserId);",
+											"        pm.environment.set(\"UserToken\", data.Result.UserToken);",
+											"    }",
+											"    else{",
+											"        pm.environment.set(\"UserId\",\"U100218990\");",
+											"        pm.environment.set(\"UserToken\",\"bvqmYfuDXOLZGrwVcHi8qDppA/Xw2kO20IIkKV/mKu8q05uF5KIZ9TYbcakwZ6sHR3azdXNM4U9ED2JPNRuRjuVBZzhezjcGLgWVszfoei4lfkXQcYI9bOlL2l83H4TYvDuH/GuRAB-HNTy9WE-P6g__\");",
+											"    }",
+											"});",
+											"    console.log(pm.variables.get(\"UserToken\"));",
+											"}",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "appversion",
+										"value": "{{appversion}}",
+										"type": "text"
+									},
+									{
+										"key": "platform",
+										"value": "{{platform}}",
+										"type": "text"
+									},
+									{
+										"key": "cityen",
+										"value": "{{cityen}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{userhost}}ReservationRequest?AppName=&CityCode={{citycode}}&Count=10&EstateCode=&FirstIndex=0&IsReserve=0&OrderBy=&OrderByCriteria=0&PostID=&ReserveID=0&Source=&StaffNo=&UserToken={{UserToken}}",
+									"host": [
+										"{{userhost}}ReservationRequest"
+									],
+									"query": [
+										{
+											"key": "AppName",
+											"value": ""
+										},
+										{
+											"key": "CityCode",
+											"value": "{{citycode}}"
+										},
+										{
+											"key": "Count",
+											"value": "10"
+										},
+										{
+											"key": "EstateCode",
+											"value": ""
+										},
+										{
+											"key": "FirstIndex",
+											"value": "0"
+										},
+										{
+											"key": "IsReserve",
+											"value": "0"
+										},
+										{
+											"key": "OrderBy",
+											"value": ""
+										},
+										{
+											"key": "OrderByCriteria",
+											"value": "0"
+										},
+										{
+											"key": "PostID",
+											"value": ""
+										},
+										{
+											"key": "ReserveID",
+											"value": "0"
+										},
+										{
+											"key": "Source",
+											"value": ""
+										},
+										{
+											"key": "StaffNo",
+											"value": ""
+										},
+										{
+											"key": "UserToken",
+											"value": "{{UserToken}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "bc39ca2e-5bea-4839-8673-c19981b070fb",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "216e6bac-22c9-4647-baa5-73ce308dc610",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "1182f7ee-84d1-473a-a6b6-09b10e4e9702",
+						"type": "text/javascript",
+						"exec": [
+							"var version = 6.2;",
+							"var release = true;",
+							"",
+							"if (data.citycode) {",
+							"    pm.environment.set(\"citycode\", data.citycode);",
+							"} else {",
+							"    pm.environment.set(\"citycode\", \"022\");",
+							"}",
+							"",
+							"if (version < 6.2 && release) {",
+							"    pm.environment.set(\"mainhost\", \"https://mobileapi.centanet.com/index/url\");",
+							"} else if (version < 6.2 && !release) {",
+							"    pm.environment.set(\"mainhost\", \"http://114.80.110.197/index/url\");",
+							"} else if (version >= 6.2 && !release) {",
+							"    pm.environment.set(\"mainhost\", \"http://10.4.18.194:8083/json/reply/CityUrlAddressList\")",
+							"} else {",
+							"    pm.environment.set(\"mainhost\", \"https://mobileapi.centanet.com/v6/java/json/reply/CityUrlAddressList\");",
+							"}",
+							"",
+							"//pm.environment.set(\"mainhost\",\"http://114.80.110.197/\");",
+							"//pm.environment.set(\"mainhost\", \"https://mobileapi.centanet.com/\");",
+							"",
+							"",
+							"if (pm.variables.get(\"platform\") == \"IOS\") {",
+							"    pm.environment.set(\"AppName\", \"APP_IOS\");",
+							"} else {",
+							"    pm.environment.set(\"AppName\", \"APP_Android\");",
+							"}",
+							"",
+							"pm.environment.set(\"version\", \"V\" + version);//接口的版本",
+							"pm.environment.set(\"appversion\", \"710\");",
+							"pm.environment.set(\"platform\", \"IOS\");",
+							"",
+							"const indexrequest = {",
+							"    url: pm.variables.get(\"mainhost\"),",
+							"    method: 'GET',",
+							"    header: ['version:' + pm.variables.get(\"version\"), 'appversion:' + pm.variables.get(\"appversion\"), 'platform:' + pm.variables.get(\"platform\")],",
+							"};",
+							"",
+							"pm.sendRequest(indexrequest, function (err, response) {",
+							"    var data = response.json();",
+							"    //console.log(pm.variables.get(\"citycode\"));",
+							"    for (var i in data.Result) {",
+							"        if (data.Result[i].Code === pm.variables.get(\"citycode\")) {",
+							"            pm.environment.set(\"eshost\", data.Result[i].APIUrl);",
+							"            pm.environment.set(\"userhost\", data.Result[i].UserCenterUrl);",
+							"            pm.environment.set(\"xfhost\", data.Result[i].NewPropUrl);",
+							"            pm.environment.set(\"bizhost\", data.Result[i].BizcommonUrl);",
+							"            //console.log(pm.variables.get(\"host\"));",
+							"            pm.environment.set(\"cityen\", data.Result[i].CityEn);",
+							"        }",
+							"    }",
+							"});"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "a6b0677d-748d-42b2-8e95-58597d4f5ad6",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	]
+}

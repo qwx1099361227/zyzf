@@ -1,0 +1,492 @@
+{
+	"info": {
+		"_postman_id": "eb2ec8ca-cbd1-47f5-9f47-33b1c95f2052",
+		"name": "House730",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "首页",
+			"item": [
+				{
+					"name": "app配置",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{mainhost}}/AppConfig/GetAppConfig?version=zh-hk1200&cityen={{cityen}}&platform={{platform}}&language=zh-hk",
+							"host": [
+								"{{mainhost}}"
+							],
+							"path": [
+								"AppConfig",
+								"GetAppConfig"
+							],
+							"query": [
+								{
+									"key": "version",
+									"value": "zh-hk1200"
+								},
+								{
+									"key": "cityen",
+									"value": "{{cityen}}"
+								},
+								{
+									"key": "platform",
+									"value": "{{platform}}"
+								},
+								{
+									"key": "language",
+									"value": "zh-hk"
+								},
+								{
+									"key": "token",
+									"value": "222_a36ec1ca386243beb263ab3de24208b3",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "首页获取售盘",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.house730.com/Property/GetLatestProperty?cityen=HK&platform=app-ios&language=en-us&length=6&rentalType=sale",
+							"protocol": "https",
+							"host": [
+								"api",
+								"house730",
+								"com"
+							],
+							"path": [
+								"Property",
+								"GetLatestProperty"
+							],
+							"query": [
+								{
+									"key": "cityen",
+									"value": "HK"
+								},
+								{
+									"key": "platform",
+									"value": "app-ios"
+								},
+								{
+									"key": "language",
+									"value": "en-us"
+								},
+								{
+									"key": "length",
+									"value": "6"
+								},
+								{
+									"key": "rentalType",
+									"value": "sale"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取版本更新信息",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://uatapi.house730.com.cn/AppConfig/GetAppConfig?version=upgrade1100&cityen={{cityen}}&platform={{platform}}&language=zh-hk",
+							"protocol": "http",
+							"host": [
+								"uatapi",
+								"house730",
+								"com",
+								"cn"
+							],
+							"path": [
+								"AppConfig",
+								"GetAppConfig"
+							],
+							"query": [
+								{
+									"key": "version",
+									"value": "upgrade1100"
+								},
+								{
+									"key": "cityen",
+									"value": "{{cityen}}"
+								},
+								{
+									"key": "platform",
+									"value": "{{platform}}"
+								},
+								{
+									"key": "language",
+									"value": "zh-hk"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "推送接口",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "admin123",
+						"username": "admin"
+					}
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"condition\":\"'news' in topics && 'zh-hk' in topics\",\"data\":{\"type\":\"21\",\"target\":\"https://www.baidu.com/\"},\"notification\":{\"body\":\"新资讯内容\",\"title\":\"House730\"}}"
+				},
+				"url": "http://testapi.house730.com/message/sendMessage"
+			},
+			"response": []
+		},
+		{
+			"name": "获取房源列表数据",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "094391f4-3d26-40ed-8954-0201446e6a04",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"var n=0;",
+							"",
+							"",
+							"if(jsonData.result.data[0] !=\"null\"){",
+							"    for(var i in jsonData.result.data){",
+							"        if(jsonData.result.data[i].topTypeWithCulture == \"標準\"){",
+							"            console.log(jsonData.result.data[i].propertyID);",
+							"            n++;",
+							"        }",
+							"    }",
+							"}",
+							"console.log(n);",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "5143b326-39d1-4970-820c-7b10ec4a9aa6",
+						"exec": [
+							"//pm.environment.set(\"host\",\"https://api.house730.com\");",
+							"pm.environment.set(\"host\",\"http://uatapi.house730.com.cn\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"pageCount\":20,\"pageIndex\":1,\"rentalType\":\"sale\",\"regionCode\":\"hk03\",\"zoneCode\":[\"hkp16\"],\"gscopeCode\":[\"hma062\"],\"propertyCategory\":[]}"
+				},
+				"url": {
+					"raw": "{{host}}/Property/SearchProperty?language=zh-hk&cityen=hk&platform=wap",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"Property",
+						"SearchProperty"
+					],
+					"query": [
+						{
+							"key": "language",
+							"value": "zh-hk"
+						},
+						{
+							"key": "cityen",
+							"value": "hk"
+						},
+						{
+							"key": "platform",
+							"value": "wap"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "获取房源详情数据",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://uatapi.house730.com/Property/GetProperty?language=zh-hk&propertyId=478831&cityen=hk&platform=wap",
+					"protocol": "https",
+					"host": [
+						"uatapi",
+						"house730",
+						"com"
+					],
+					"path": [
+						"Property",
+						"GetProperty"
+					],
+					"query": [
+						{
+							"key": "language",
+							"value": "zh-hk"
+						},
+						{
+							"key": "propertyId",
+							"value": "478831"
+						},
+						{
+							"key": "cityen",
+							"value": "hk"
+						},
+						{
+							"key": "platform",
+							"value": "wap"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "获取地区数据",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.house730.com/DictionaryInfo/SearchGscope?cityen=hk&platform=app-android&language=zh-hk",
+					"protocol": "https",
+					"host": [
+						"api",
+						"house730",
+						"com"
+					],
+					"path": [
+						"DictionaryInfo",
+						"SearchGscope"
+					],
+					"query": [
+						{
+							"key": "cityen",
+							"value": "hk"
+						},
+						{
+							"key": "platform",
+							"value": "app-android"
+						},
+						{
+							"key": "language",
+							"value": "zh-hk"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "首页宣传广告",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "308ec194-6832-4d31-b33f-8c5b688435ab",
+						"exec": [
+							"//pm.environment.set(\"adhost\",\"https://digital.house730.com/\");",
+							"pm.environment.set(\"adhost\",\"http://uatdigital.house730.com.cn/\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{adhost}}www/scripts/loader4app.php?mediaId=3   ",
+					"host": [
+						"{{adhost}}www"
+					],
+					"path": [
+						"scripts",
+						"loader4app.php"
+					],
+					"query": [
+						{
+							"key": "mediaId",
+							"value": "3   "
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "首页获取推荐房源",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://uatapi.house730.com.cn/Property/GetLatestProperty?language=zh-hk&rentalType=sale&length=9&cityen=hk&platform=wap",
+					"protocol": "http",
+					"host": [
+						"uatapi",
+						"house730",
+						"com",
+						"cn"
+					],
+					"path": [
+						"Property",
+						"GetLatestProperty"
+					],
+					"query": [
+						{
+							"key": "language",
+							"value": "zh-hk"
+						},
+						{
+							"key": "rentalType",
+							"value": "sale"
+						},
+						{
+							"key": "length",
+							"value": "9"
+						},
+						{
+							"key": "cityen",
+							"value": "hk"
+						},
+						{
+							"key": "platform",
+							"value": "wap"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "获取新房地区",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "language",
+						"value": "zh-hk",
+						"type": "text"
+					},
+					{
+						"key": "cityen",
+						"value": "{{cityen}}",
+						"type": "text"
+					},
+					{
+						"key": "platform",
+						"value": "{{platform}}",
+						"type": "text"
+					}
+				],
+				"url": "{{mainhost}}/DictionaryInfo/GetArea   "
+			},
+			"response": []
+		},
+		{
+			"name": "获取筛选选项数据",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://uatapi.house730.com.cn/DictionaryInfo/SearchDictionaryInfo?cityen=hk&platform=app-android&language=zh-hk",
+					"protocol": "http",
+					"host": [
+						"uatapi",
+						"house730",
+						"com",
+						"cn"
+					],
+					"path": [
+						"DictionaryInfo",
+						"SearchDictionaryInfo"
+					],
+					"query": [
+						{
+							"key": "cityen",
+							"value": "hk"
+						},
+						{
+							"key": "platform",
+							"value": "app-android"
+						},
+						{
+							"key": "language",
+							"value": "zh-hk"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "1d27403b-0e1e-4569-a035-9c7495f7c61e",
+				"type": "text/javascript",
+				"exec": [
+					"//pm.environment.set(\"mainhost\",\"http://uatapi.house730.com.cn\");",
+					"pm.environment.set(\"mainhost\",\"http://10.29.204.80\");",
+					"//pm.environment.set(\"mainhost\",\"https://api.house730.com\");",
+					"pm.environment.set(\"cityen\",\"HK\")//城市en",
+					"pm.environment.set(\"platform\",\"app-ios\");",
+					"//pm.environment.set(\"version\",\"v6.2\");//接口的版本",
+					"//pm.environment.set(\"appversion\",\"700\");",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "0f47f1cf-fb85-41fa-af3b-d0198c73634d",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
